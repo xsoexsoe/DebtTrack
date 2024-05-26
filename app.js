@@ -15,12 +15,7 @@ const upload = multer({ storage: storage });
 
 // รับไฟล์ Excel และบันทึกข้อมูลลงในฐานข้อมูล
 app.post('/upload121', upload.single('file'), (req, res) => {
-    // const referer = req.headers.referer;
-    // // เช็คว่า referer header มีค่าและเป็น 'uploadfile121.html' หรือไม่
-    // if (!referer || !referer.includes('uploadfile121.html')) {
-    //     return res.status(403).json({ message: 'Forbidden. Invalid Referer header.' });
-    // }
-
+ 
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded.' });
     }
@@ -30,7 +25,7 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     const data = XLSX.utils.sheet_to_json(sheet);
 
     // ตรวจสอบข้อมูลที่มีการซ้ำในฐานข้อมูล
-    const existingDataQuery = 'SELECT name FROM testt';
+    const existingDataQuery = 'SELECT name FROM customer';
     connection.query(existingDataQuery, (err, results) => {
         if (err) {
             console.error('Error executing SQL query:', err);
@@ -112,6 +107,20 @@ app.get('/data', (req, res) => {
         res.json(results);
     });
 });
+
+// Endpoint to fetch holidays
+app.get('/holidays', (req, res) => {
+    const sql = 'SELECT date, description FROM holiday';
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching holidays:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.json(results);
+    });
+});
+
 // เริ่มต้นเซิร์ฟเวอร์ที่พอร์ต 5500
 app.listen(5500, () => {
     console.log('Server is running on port 5500');

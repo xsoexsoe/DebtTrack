@@ -1,6 +1,4 @@
 const express = require('express');
-const multer = require('multer');
-const XLSX = require('xlsx');
 const mysql = require('mysql');
 const cors = require('cors');
 
