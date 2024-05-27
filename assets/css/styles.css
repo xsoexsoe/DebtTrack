@@ -77,7 +77,6 @@
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
 }
-
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -14857,4 +14856,8 @@ html, body {
 .popup p {
   text-align: center;
   font-size: 18px;
+}
+.holiday {
+  background-color: #ffe7e7 !important;
+  color: #ff6347 !important;
 }
