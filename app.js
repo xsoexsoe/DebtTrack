@@ -13,40 +13,81 @@ app.use(cors());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// รับไฟล์ Excel และบันทึกข้อมูลลงในฐานข้อมูล
+// ตั้งค่าเส้นทางสำหรับการอัพโหลดไฟล์
 app.post('/upload121', upload.single('file'), (req, res) => {
- 
+    // ตรวจสอบว่าไฟล์ถูกอัพโหลดมาหรือไม่
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded.' });
     }
 
+    // อ่านไฟล์ Excel
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
 
-    // ตรวจสอบข้อมูลที่มีการซ้ำในฐานข้อมูล
-    const existingDataQuery = 'SELECT name FROM customer';
-    connection.query(existingDataQuery, (err, results) => {
+    console.log('Data from Excel:', JSON.stringify(data, null, 2));
+
+    // เริ่มต้นการทำธุรกรรม
+    connection.beginTransaction(err => {
         if (err) {
-            console.error('Error executing SQL query:', err);
-            return res.status(500).json({ message: 'Error querying existing data.' });
+            console.error('Error starting transaction:', err);
+            return res.status(500).json({ message: 'Error starting transaction.' });
         }
 
-        const existingNames = results.map(result => result.name);
-        const newData = data.filter(row => !existingNames.includes(row.name));
-
-        const sql = 'INSERT IGNORE customer (ca, idpea, pea_position, name) VALUES ?';
-        const values = data.map(row => [row.หมายเลขผู้ใช้ไฟฟ้า, row["กฟฟ."], row["ชื่อ กฟฟ."], row.ชื่อ ]);
-
-        connection.query(sql, [values], (err, result) => {
+        // ตรวจสอบข้อมูลที่มีการซ้ำในฐานข้อมูล
+        const existingDataQuery = 'SELECT name FROM customer';
+        connection.query(existingDataQuery, (err, results) => {
             if (err) {
                 console.error('Error executing SQL query:', err);
-                return res.status(500).json({ message: 'Error uploading data.' });
+                return connection.rollback(() => {
+                    res.status(500).json({ message: 'Error querying existing data.' });
+                });
             }
-           
-            console.log('Data uploaded successfully:', result);
-            res.json({ message: 'Data uploaded successfully.' });
-            // res.end();
+
+            // กรองข้อมูลใหม่ที่ไม่มีในฐานข้อมูล
+            const existingNames = results.map(result => result.name);
+            const newData = data.filter(row => !existingNames.includes(row.name));
+
+            // เตรียมคำสั่ง SQL สำหรับการเพิ่มข้อมูลในตาราง customer
+            const sql1 = 'INSERT IGNORE INTO customer (ca, id_pea, pea_position, name) VALUES ?';
+            const values1 = newData.map(row => [row.หมายเลขผู้ใช้ไฟฟ้า, row.BA, row["กฟฟ."], row.ชื่อ]);
+
+            // เพิ่มข้อมูลในตาราง customer
+            connection.query(sql1, [values1], (err, result1) => {
+                if (err) {
+                    console.error('Error executing SQL query:', err);
+                    return connection.rollback(() => {
+                        res.status(500).json({ message: 'Error uploading data to customer table.' });
+                    });
+                }
+
+                // เตรียมคำสั่ง SQL สำหรับการเพิ่มข้อมูลในตารางอื่น
+                const sql2 = 'INSERT INTO bills (money, tax, non_tax, bill_month, customer_ca, id_command) VALUES ?'; // แก้ไขให้ตรงกับตารางที่สองของคุณ
+                const values2 = newData.map(row => [row.จำนวนเงิน, row.ภาษี, row.เงินไม่รวมภาษี, row.บิลเดือน, row.หมายเลขผู้ใช้ไฟฟ้า, row.คำสั่ง]); // แก้ไขให้ตรงกับข้อมูลที่ต้องการบันทึก
+
+                // เพิ่มข้อมูลในตารางที่สอง
+                connection.query(sql2, [values2], (err, result2) => {
+                    if (err) {
+                        console.error('Error executing SQL query:', err);
+                        return connection.rollback(() => {
+                            res.status(500).json({ message: 'Error uploading data to another table.' });
+                        });
+                    }
+
+                    // ยืนยันการทำธุรกรรม
+                    connection.commit(err => {
+                        if (err) {
+                            console.error('Error committing transaction:', err);
+                            return connection.rollback(() => {
+                                res.status(500).json({ message: 'Error committing transaction.' });
+                            });
+                        }
+
+                        console.log('Data uploaded successfully to both tables:', result1, result2);
+                        res.json({ message: 'Data uploaded successfully to both tables.' });
+                    });
+                });
+            });
         });
     });
 });

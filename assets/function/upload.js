@@ -19,6 +19,9 @@ async function uploadExcel121() {
             method: 'POST',
             body: formData
         });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
         const data = await response.json();
         // แสดง Modal เมื่ออัปโหลดสำเร็จ
         var successModal = new bootstrap.Modal(document.getElementById('successModal'));
