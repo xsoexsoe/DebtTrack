@@ -14861,3 +14861,44 @@ html, body {
   background-color: #ffe7e7 !important;
   color: #ff6347 !important;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: revert; /* Adjust padding as needed */
+  margin: 0 0.1em; /* Adjust margin as needed */
+  border: 1px solid #ddd; /* Border styling */
+  border-radius: 4px; /* Rounded corners */
+  color: #007bff; /* Text color */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: #e9ecef; /* Hover background color */
+  border: 1px solid #ddd; /* Hover border color */
+  color: #0056b3; /* Hover text color */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background-color: #007bff; /* Active button background color */
+  color: white !important; /* Active button text color */
+  border: 1px solid #007bff; /* Active button border color */
+}
+.card-headerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+}
+.header-text {
+  display: flex;
+  align-items: center;
+}
+.header-text h6, .header-text p, .header-text h5 {
+  margin: 1rem;
+}
+.header-text h6 {
+  font-weight: bold;
+  color: #007bff; /* text-primary */
+}
+.header-text p {
+  color: #000; /* text-dark */
+  margin-left: 0.5rem;
+}

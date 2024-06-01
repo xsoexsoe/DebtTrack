@@ -3,8 +3,12 @@ const multer = require('multer');
 const XLSX = require('xlsx');
 const connection = require('./assets/db/db'); // เรียกใช้ไฟล์การเชื่อมต่อกับฐานข้อมูล
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(bodyParser.json()); // ใช้ body-parser เพื่ออ่าน JSON payloads
+app.use(bodyParser.urlencoded({ extended: true })); // ใช้ body-parser เพื่ออ่าน URL-encoded payloads
+
 
 // ให้ Express.js ใช้งาน CORS middleware
 app.use(cors());
@@ -25,7 +29,7 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
 
-    console.log('Data from Excel:', JSON.stringify(data, null, 2));
+    // console.log('Data from Excel:', JSON.stringify(data, null, 2));
 
     // เริ่มต้นการทำธุรกรรม
     connection.beginTransaction(err => {
@@ -62,8 +66,8 @@ app.post('/upload121', upload.single('file'), (req, res) => {
                 }
 
                 // เตรียมคำสั่ง SQL สำหรับการเพิ่มข้อมูลในตารางอื่น
-                const sql2 = 'INSERT INTO bills (money, tax, non_tax, bill_month, customer_ca, id_command) VALUES ?'; // แก้ไขให้ตรงกับตารางที่สองของคุณ
-                const values2 = newData.map(row => [row.จำนวนเงิน, row.ภาษี, row.เงินไม่รวมภาษี, row.บิลเดือน, row.หมายเลขผู้ใช้ไฟฟ้า, row.คำสั่ง]); // แก้ไขให้ตรงกับข้อมูลที่ต้องการบันทึก
+                const sql2 = 'INSERT INTO bills (money, tax, non_tax, bill_month, status, customer_ca, id_command) VALUES ?'; // แก้ไขให้ตรงกับตารางที่สองของคุณ
+                const values2 = newData.map(row => [row.จำนวนเงิน, row.ภาษี, row.เงินไม่รวมภาษี, row.บิลเดือน, 'ยังไม่ดำเนินการ', row.หมายเลขผู้ใช้ไฟฟ้า, row.คำสั่ง]); // แก้ไขให้ตรงกับข้อมูลที่ต้องการบันทึก
 
                 // เพิ่มข้อมูลในตารางที่สอง
                 connection.query(sql2, [values2], (err, result2) => {
@@ -92,12 +96,7 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     });
 });
 app.post('/upload030', upload.single('file'), (req, res) => {
-    // const referer = req.headers.referer;
-    // // เช็คว่า referer header มีค่าและเป็น 'uploadfile121.html' หรือไม่
-    // if (!referer || !referer.includes('uploadfile121.html')) {
-    //     return res.status(403).json({ message: 'Forbidden. Invalid Referer header.' });
-    // }
-
+  
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded.' });
     }
@@ -131,23 +130,18 @@ app.post('/upload030', upload.single('file'), (req, res) => {
     });
 });
 
-
-
-// ดึงข้อมูลมาแสดง
-app.get('/data', (req, res) => {
-    // คำสั่ง SQL สำหรับเลือกข้อมูล
-    const sql = 'SELECT * FROM customer';
-
-    // Query ข้อมูลจากฐานข้อมูล
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error('Error querying database: ' + error.stack);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-        res.json(results);
+// ฟังก์ชันเพื่อ query ข้อมูล
+function queryDatabase(sql) {
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (error, results) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(results);
+        });
     });
-});
+}
+
 
 // Endpoint to fetch holidays
 app.get('/holidays', (req, res) => {
@@ -161,8 +155,134 @@ app.get('/holidays', (req, res) => {
         res.json(results);
     });
 });
+// ดึงข้อมูลมาแสดง
+app.get('/data', (req, res) => {
+    const sqlCount = `
+        SELECT id_command, customer_ca, COUNT(*) AS count_bills
+        FROM bills
+        GROUP BY id_command, customer_ca
+        HAVING COUNT(*) >= 1;
+    `;
+
+    const sqlSumMoney = `
+        SELECT id_command, customer_ca, ROUND(SUM(money), 2) as total_money
+        FROM bills
+        GROUP BY id_command, customer_ca
+        HAVING COUNT(*) >= 1;
+    `;
+
+    const sqlJoin = `
+        SELECT customer.*, bills.*
+        FROM customer
+        INNER JOIN bills ON customer.ca = bills.customer_ca;
+    `;
+
+    const sqlCustomerHasBills = `
+        SELECT * FROM customer_has_bills;
+    `;
+
+    connection.query(sqlSumMoney, (error, sumMoneyResults) => {
+        if (error) {
+            console.error('Error querying database (sum money): ' + error.stack);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        connection.query(sqlCount, (error, countResults) => {
+            if (error) {
+                console.error('Error querying database (count): ' + error.stack);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+
+            connection.query(sqlJoin, (error, joinResults) => {
+                if (error) {
+                    console.error('Error querying database (join): ' + error.stack);
+                    res.status(500).send('Internal Server Error');
+                    return;
+                }
+
+                connection.query(sqlCustomerHasBills, (error, customerHasBillsResults) => {
+                    if (error) {
+                        console.error('Error querying database (customer has bills): ' + error.stack);
+                        res.status(500).send('Internal Server Error');
+                        return;
+                    }
+
+                    res.json({
+                        sumMoneyResults: sumMoneyResults,
+                        countResults: countResults,
+                        joinResults: joinResults,
+                        customerHasBillsResults: customerHasBillsResults
+                    });
+                });
+            });
+        });
+    });
+});
+
+app.post('/save-date', (req, res) => {
+    const { customer_ca, id_command, date, bills_id } = req.body;
+
+    if (!customer_ca || !id_command || !date || !bills_id) {
+        res.status(400).send('Bad Request: Missing required fields');
+        return;
+    }
+    
+    // SQL เพื่อเช็คว่ามีข้อมูลอยู่ในตารางหรือไม่
+    const checkSql = `
+        SELECT * FROM customer_has_bills 
+        WHERE customer_ca = ? AND bills_id = ?;
+    `;
+
+    // SQL เพื่อเพิ่มข้อมูลใหม่
+    const insertSql = `
+        INSERT INTO customer_has_bills (customer_ca, bills_id, date_system, date_employee) 
+        VALUES (?, ?, ?, ?);
+    `;
+
+    // SQL เพื่ออัปเดตข้อมูล
+    const updateSql = `
+        UPDATE customer_has_bills 
+        SET date_system = ?, date_employee = ? 
+        WHERE customer_ca = ? AND bills_id = ?;
+    `;
+
+    connection.query(checkSql, [customer_ca, bills_id], (error, results) => {
+        if (error) {
+            console.error('Error querying database: ' + error.stack);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length > 0) {
+            // ถ้ามีข้อมูลอยู่แล้ว อัปเดตข้อมูล
+            connection.query(updateSql, [date, date, customer_ca, bills_id], (error, results) => {
+                if (error) {
+                    console.error('Error updating database: ' + error.stack);
+                    res.status(500).send('Internal Server Error');
+                    return;
+                }
+                res.send('Date updated successfully');
+            });
+        } else {
+            // ถ้าไม่มีข้อมูล เพิ่มข้อมูลใหม่
+            connection.query(insertSql, [customer_ca, bills_id, date, date], (error, results) => {
+                if (error) {
+                    console.error('Error inserting into database: ' + error.stack);
+                    res.status(500).send('Internal Server Error');
+                    return;
+                }
+                res.send('Date inserted successfully');
+            });
+        }
+    });
+});
 
 // เริ่มต้นเซิร์ฟเวอร์ที่พอร์ต 5500
 app.listen(5500, () => {
     console.log('Server is running on port 5500');
 });
+
+
+

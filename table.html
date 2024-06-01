@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -8,21 +8,20 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/css/MUSA_panel-table-panel-table.css">
-    <link rel="stylesheet" href="assets/css/MUSA_panel-table.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/Drag-Drop-File-Input-Upload.css">
-    <link rel="stylesheet" href="assets/css/Hero-Clean-images.css">
     <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
+ 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- Add DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!-- Custom styles for this page -->
+    <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
     <div id="wrapper">
+        <!-- Sidebar -->
         <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="background:#9B3790;">
             <div class="container-fluid p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
@@ -43,6 +42,8 @@
                 </ul>
             </div>
         </nav>
+        
+        <!-- Content Wrapper -->
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-expand shadow mb-4 topbar static-top navbar-light" style="background:linear-gradient(#bc4bb0 0%, #9b3790 100%), #9b3790;">
@@ -61,49 +62,32 @@
                 </nav>
                 <div class="container-fluid">
                     <h3 class="text-dark mb-4 font">กฟส.เขมราฐ</h3>
-                    <div class="card shadow">
-                        <div class="card-header"><i class="fas fa-table me-1"></i><span>รายละเอียดลูกหนี้</span></div>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">รายละเอียดลูกหนี้</h6>
+                        </div>
                         <div class="card-body">
-                            <table class="table table-hover table-striped table-responsivemy-0 " id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                <thead>
-                                    <tr style="background: #bd9cf2;border-width: 1px;border-style: dashed;">
-                                        <th style="width:5%; border-width: 1px;">กฟฟ.</th>
-                                        <th style="width:7%; border-width: 1px;">ชื่อ กฟฟ.</th>
-                                        <th style="border-width: 1px;">หมายเลขผู้ใช้ไฟ</th>
-                                        <th style="border-width: 1px;">ชื่อ</th>
-                                        <th style="border-width: 1px;">ฉบับ</th>
-                                        <th style="border-width: 1px;">จำนวนเงิน</th>
-                                        <th style="border-width: 1px;">สถานะ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    <script>
-                                        // เรียกใช้ Fetch API เพื่อดึงข้อมูลจาก API
-                                        fetch('http://localhost:5500/data')
-                                        .then(response => response.json()) // แปลงข้อมูลที่ได้จาก API เป็น JSON
-                                        .then(data => {
-                                            const tableBody = document.getElementById('tableBody'); // อ้างอิงถึงองค์ประกอบ tbody ในตาราง
-                                            // วนลูปเพื่อสร้างแถวของตารางจากข้อมูลที่ได้รับ
-                                            data.forEach(row => {
-                                            const tr = document.createElement('tr'); // สร้างแถวใหม่ในตาราง
-                                            tr.innerHTML = `
-                                                <td style="border-width: 1px;">${row.id_pea}</td>
-                                                <td style="border-width: 1px;">${row.pea_position}</td>
-                                                <td style="border-width: 1px;">${row.ca}</td>
-                                                <td style="border-width: 1px;">${row.name}</td>
-                                                <td style="border-width: 1px;">${row.bill_num}</td>
-                                                <td style="border-width: 1px;">${row.bill_amount}</td>
-                                                <td style="border-width: 1px;"><a class="btn btn-outline-warning btn-sm d-none d-sm-inline-block" role="button" href="#"><i class="fas fa-edit text-yellow-50 fa-sm"></i>&nbsp;แก้ไข</a></td>
-                                            `; // เพิ่มข้อมูลในแถวใหม่
-                                            tableBody.appendChild(tr); // เพิ่มแถวใหม่ใน tbody ของตาราง
-                                        });
-                                        })
-                                        .catch(error => console.error('Error fetching data:', error)); // จัดการข้อผิดพลาดกรณีที่ดึงข้อมูลไม่สำเร็จ
-
-                                    </script>
-                                    <!-- Data will be populated dynamically -->
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr class="text-center align-middle">
+                                            <th>กฟฟ.</th>
+                                            <th>ชื่อ กฟฟ.</th>
+                                            <th>หมายเลขผู้ใช้ไฟ</th>
+                                            <th>ชื่อ</th>
+                                            <th>ฉบับ</th>
+                                            <th>จำนวนเงิน</th>
+                                            <th>คำสั่ง</th>
+                                            <th>สถานะ</th>
+                                            <th>action</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody id="tableBody">
+                                        <!-- Data will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,18 +99,13 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="assets/js/sb-admin-2.min.js"></script>
     <script src="assets/function/table.js"></script>
-
-    <script>
-    // Initializing DataTable เมื่อเอกสารถูกโหลดเสร็จสมบูรณ์
-$(document).ready(function () {
-    $("#dataTable").DataTable(); // เรียกใช้ DataTable บนตารางที่มี id="dataTable"
-});
-        </script>
 </body>
 
 </html>
