@@ -41,7 +41,14 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 <td class="text-center align-middle">${joinRow.bill_month || '-'}</td>
                 <td class="text-end align-middle">${joinRow.money || '-'}</td>
                 <td class="text-center align-middle">${joinRow.id_command || '-'}</td>
-             
+                <td style="text-align: center; vertical-align: middle;">
+  <span class="badge ${joinRow.status === 'ชำระแล้ว' ? 'bg-success' : (joinRow.status === 'ดำเนินการแล้ว' ? 'bg-primary' : 'bg-warning')} rounded-pill" style="display: inline-block; width: 100%; padding: 10px;">
+    ${joinRow.status || '-'}
+  </span>
+</td>
+
+
+
             `;
             tableBody.appendChild(tr);
         }
@@ -176,6 +183,25 @@ function populateForm(params) {
         document.getElementById('num_bills').value = params.num_bills;
     }
 
+}
+
+function previewFile(inputId, imgId) {
+    const fileInput = document.getElementById(inputId);
+    const preview = document.getElementById(imgId);
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block';
+    }
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+        preview.style.display = 'none';
+    }
 }
 
 // ดึง query parameters และเติมข้อมูลลงในฟอร์มเมื่อเอกสารโหลดเสร็จ

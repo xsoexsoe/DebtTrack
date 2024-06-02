@@ -14902,3 +14902,10 @@ html, body {
   color: #000; /* text-dark */
   margin-left: 0.5rem;
 }
+.image-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.image-container img {
+  width: 100%;
+}
