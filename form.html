@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
-    
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -32,7 +31,6 @@
                                 <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                                 <path d="M12 17l-1 -4l-4 -1l9 -4z"></path>
                             </svg><span style="font-family: Prompt, sans-serif;font-size: 15.6px;"><strong>พิกัดลูกหนี้</strong></span></a></li>
-                            
                 </ul>
             </div>
         </nav>
@@ -40,7 +38,6 @@
             <div id="content">
                 <nav class="navbar navbar-expand shadow mb-4 topbar static-top navbar-light" style="background:linear-gradient(#bc4bb0 0%, #9b3790 100%), #9b3790;">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button><ul class="navbar-nav flex-nowrap ms-auto">
-
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-light small">พนักงานบัญชี</span></a>
@@ -59,87 +56,94 @@
                                     <span class="text-center" style="font-family:Prompt, sans-serif;"><span style="color: rgb(255, 255, 255);font-family: Prompt, sans-serif; font-size: 24px;">ฟอร์มกรอกข้อมูล</span></span>
                                 </header>
                                 <div class="card-body">
-                                    <form  id="dataForm">
-                                    <div class="row">
-                                        <div class="col text-center">
-                                            <label for="id_command" class="form-label">คำสั่ง</label>
-                                            <input type="text" class="form-control text-center" id="id_command" required disabled>
-                                        </div>
-                                        <div class="col text-center">
-                                            <label for="customer_ca" class="form-label">หมายเลขผู้ใช้ไฟ</label>
-                                            <input type="text" class="form-control text-center" id="customer_ca" required disabled>
-                                        </div>
-                                    
-                                        <div class="col-xl-3 col-md-6 mb-4 text-center">
-                                            <label for="name" class="form-label ">ชื่อ-สกุล</label>
-                                            <input type="text" class="form-control text-center" id="name" required disabled>
-                                        </div>
-                                    
-                                        <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                            <label for="num_bills" class="form-label">จำนวนบิล</label>
-                                            <input type="text" class="form-control text-center" id="num_bills" required disabled>
-                                        </div>
-                                        <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                            <label for="total_money" class="form-label ">จำนวนเงิน</label>
-                                            <input type="text" class="form-control text-end" id="total_money" required disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="date_system" class="form-label">ระบบอนุมัติ</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="date_system" required>
-                                                <button class="btn btn-outline-secondary" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
-                                                <button class="btn btn-outline-secondary" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                    <form id="dataForm">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <label for="id_command" class="form-label">คำสั่ง</label>
+                                                <input type="text" class="form-control text-center" id="id_command" required disabled>
+                                            </div>
+                                            <div class="col text-center">
+                                                <label for="customer_ca" class="form-label">หมายเลขผู้ใช้ไฟ</label>
+                                                <input type="text" class="form-control text-center" id="customer_ca" required disabled>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6 mb-4 text-center">
+                                                <label for="name" class="form-label">ชื่อ-สกุล</label>
+                                                <input type="text" class="form-control text-center" id="name" required disabled>
+                                            </div>
+                                            <div class="col-xl-2 col-md-6 mb-4 text-center">
+                                                <label for="num_bills" class="form-label">จำนวนบิล</label>
+                                                <input type="text" class="form-control text-center" id="num_bills" required disabled>
+                                            </div>
+                                            <div class="col-xl-2 col-md-6 mb-4 text-center">
+                                                <label for="total_money" class="form-label">จำนวนเงิน</label>
+                                                <input type="text" class="form-control text-end" id="total_money" required disabled>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="date_employee" class="form-label">วันที่พนักงานสั่งตัด</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="date_employee" required>
-                                                <button class="btn btn-outline-secondary" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
-                                                <button class="btn btn-outline-secondary" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="date_system" class="form-label">ระบบอนุมัติ</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_system" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="date_employee" class="form-label">วันที่พนักงานสั่งตัด</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_employee" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="date_company" class="form-label">วันที่ผู้รับเหมาตัด</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_company" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_company"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="date_deferment" class="form-label">วันที่ผ่อนผัน</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_deferment" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="date_company" class="form-label">วันที่ผู้รับเหมาตัด</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="date_company" required>
-                                                <button class="btn btn-outline-secondary" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
-                                                <button class="btn btn-outline-secondary" type="button" data-clear="date_company"><i  class="fas fa-times" style="color: crimson;"></i></button>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="file1" class="form-label">Upload File 1</label>
+                                                <input type="file" class="form-control" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
+                                                <div class="image-container">
+                                                    <img id="preview1" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="file2" class="form-label">Upload File 2</label>
+                                                <input type="file" class="form-control" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
+                                                <div class="image-container">
+                                                    <img id="preview2" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="date_deferment" class="form-label">วันที่ผ่อนผัน</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="date_deferment" required>
-                                                <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
-                                                <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <!-- New file upload fields with previews -->
-                                        <div class="col">
-                                            <label for="file1" class="form-label">Upload File 1</label>
-                                            <input type="file" class="form-control" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
-                                            <div class="image-container">
-                                                <img id="preview1" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <label for="file2" class="form-label">Upload File 2</label>
-                                            <input type="file" class="form-control" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
-                                            <div class="image-container">
-                                                <img id="preview2" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
-                                            </div>
-                                        </div>
-                                    
-                                    </div>
-                                    <br>
+                                        <br>
                                         <div class="row justify-content-center">
-                                            <div class="col text-center"><button type="submit" class="btn btn-primary " style="height: 50px; width: 200px;">บันทึก</button></div>
+                                            <div class="col text-center">
+                                                <button type="button" id="calculateButton" class="btn btn-primary" style="height: 50px; width: 200px;">คำนวณ</button>
+                                            </div>
+                                            <div class="col text-center">
+                                                <button type="button" id="printButton" class="btn btn-secondary" style="height: 50px; width: 200px;">ปริ้น</button>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row justify-content-center">
+                                            <div class="col text-center">
+                                                <button type="submit" class="btn btn-primary" style="height: 50px; width: 200px;">บันทึก</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -157,14 +161,32 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr class="text-center align-middle">
-                                                <th>กฟฟ.</th>
-                                                <th>ชื่อ กฟฟ.</th>
-                                                <th>หมายเลขผู้ใช้ไฟ</th>
-                                                <th>ชื่อ</th>
-                                                <th>บิลเดือน</th>
-                                                <th>จำนวนเงิน</th>
-                                                <th>คำสั่ง</th>
-                                                <th>สถานะ</th>
+                                                <th rowspan="2">บิลเดือน</th>
+                                                <th rowspan="2">งดหน่วย</th>
+                                                <th colspan="2">วันที่ รอบการอ่านหน่วย</th>
+                                                <th rowspan="2">จำนวนวันรอบการใช้ไฟฟ้า</th>
+                                                <th rowspan="2">จำนวนเงินหลังโอนหักเงินประกันรวม VAT 7%</th>
+                                                <th colspan="4">ผบ./ผบช.</th>
+                                                <th colspan="4">ผจจ.สั่งจดจ่ายไฟ</th>
+                                                <th colspan="3">ผจจ.ถอดมิเตอร์</th>
+                                                <th colspan="4">ความรับผิดชอบ (บาท)</th>
+                                            </tr>
+                                            <tr class="text-center align-middle">
+                                                <th>ก่อน</th>
+                                                <th>หลัง</th>
+                                                <th>อนุมัติจ่ายไฟ</th>
+                                                <th>ระบบอนุมัติจ่ายไฟ</th>
+                                                <th>วันที่สั่งจ่ายไฟ</th>
+                                                <th>จ่ายไฟ<br>SAP</th>
+                                                <th>อนุมัติจ่ายไฟ</th>
+                                                <th>วันที่บันทึกอนุมัติ</th>
+                                                <th>ถอดมิเตอร์</th>
+                                                <th>ส่งมิเตอร์คืนคลัง</th>
+                                                <th>รับมิเตอร์คืนคลัง</th>
+                                                <th>พชง.งดจ่ายไฟ</th>
+                                                <th>พชบ.</th>
+                                                <th>ผู้รับจ้าง</th>
+                                                <th>กฟก.</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableform">
@@ -177,14 +199,13 @@
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
-                </div>
-            </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        <footer class="bg-white sticky-footer">
+            <div class="container my-auto">
+                <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
+            </div>
+        </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/vendor/jquery/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

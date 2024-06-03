@@ -46,7 +46,18 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
     ${joinRow.status || '-'}
   </span>
 </td>
-
+<td class="text-center align-middle">${joinRow.id_pea || '-'}</td>
+                <td class="text-center align-middle">${joinRow.pea_position || '-'}</td>
+                <td class="text-center align-middle">${joinRow.ca || '-'}</td>
+                <td class="text-center align-middle">${joinRow.name || '-'}</td>
+                <td class="text-center align-middle">${joinRow.bill_month || '-'}</td>
+                <td class="text-end align-middle">${joinRow.money || '-'}</td>
+                <td class="text-center align-middle">${joinRow.id_command || '-'}</td>
+                <td style="text-align: center; vertical-align: middle;">
+  <span class="badge ${joinRow.status === 'ชำระแล้ว' ? 'bg-success' : (joinRow.status === 'ดำเนินการแล้ว' ? 'bg-primary' : 'bg-warning')} rounded-pill" style="display: inline-block; width: 100%; padding: 10px;">
+    ${joinRow.status || '-'}
+  </span>
+</td>
 
 
             `;
@@ -71,6 +82,7 @@ fetch('http://localhost:5500/data')
 
 // เริ่มต้น DataTable เมื่อเอกสารพร้อมใช้งาน
 $(document).ready(function () {
+    
     // DataTable จะเริ่มต้นหลังจากข้อมูลถูกเติมลงในตารางแล้ว
 });
 
@@ -184,7 +196,7 @@ function populateForm(params) {
     }
 
 }
-
+// ฟังก์ชัน ดูไฟล์รูป
 function previewFile(inputId, imgId) {
     const fileInput = document.getElementById(inputId);
     const preview = document.getElementById(imgId);
@@ -203,6 +215,60 @@ function previewFile(inputId, imgId) {
         preview.style.display = 'none';
     }
 }
+
+document.getElementById('calculateButton').addEventListener('click', function () {
+    const dateSystem = new Date(document.getElementById('date_system').value);
+    const dateEmployee = new Date(document.getElementById('date_employee').value);
+    const dateCompany = new Date(document.getElementById('date_company').value);
+    const totalMoney = parseFloat(document.getElementById('total_money').value);
+
+    // ฟังก์ชันคำนวณจำนวนวันที่ไม่รวมวันหยุดเสาร์-อาทิตย์
+    function calculateBusinessDays(startDate, endDate) {
+        let count = 0;
+        let curDate = new Date(startDate);
+
+        while (curDate <= endDate) {
+            const dayOfWeek = curDate.getDay();
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) { // ไม่รวมวันเสาร์และวันอาทิตย์
+                count++;
+            }
+            curDate.setDate(curDate.getDate() + 1);
+        }
+        return count;
+    }
+
+    // คำนวณจำนวนวันในเดือนที่ให้มาสำหรับการคำนวณอัตรารายวัน
+    function getDaysInMonth(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        return new Date(year, month, 0).getDate();
+    }
+
+    // คำนวณจำนวนวันในเดือนที่ระบุ
+    const daysInMonth = getDaysInMonth(dateSystem);
+
+    // อัตราค่าใช้จ่ายต่อวัน
+    const dailyRate = totalMoney / daysInMonth;
+
+    // คำนวณจำนวนวันที่พนักงานล่าช้า
+    const daysLateEmployee = calculateBusinessDays(dateSystem, dateEmployee) - 1; // ไม่รวมวันเริ่มต้น
+
+    // คำนวณจำนวนเงินที่พนักงานต้องรับผิดชอบ
+    const responsibilityAmountEmployee = daysLateEmployee * dailyRate;
+
+    // คำนวณจำนวนวันที่ผู้รับจ้างล่าช้าจากวันที่พนักงานสั่งงาน
+    const daysLateContractor = calculateBusinessDays(dateEmployee, dateCompany) - 8; // ไม่รวมวันเริ่มต้นและระยะเวลา 7 วัน
+
+    // คำนวณจำนวนเงินที่ผู้รับจ้างต้องรับผิดชอบ
+    const responsibilityAmountContractor = daysLateContractor * dailyRate;
+
+    alert(`พนักงานต้องรับผิดชอบเป็นจำนวน ${daysLateEmployee} วัน และเป็นเงิน ${responsibilityAmountEmployee.toFixed(2)} บาท\nผู้รับจ้างต้องรับผิดชอบเป็นจำนวน ${daysLateContractor} วัน และเป็นเงิน ${responsibilityAmountContractor.toFixed(2)} บาท`);
+});
+// ปุ่มปริ้น
+document.getElementById('printButton').addEventListener('click', function () {
+    window.print();
+});
+
 
 // ดึง query parameters และเติมข้อมูลลงในฟอร์มเมื่อเอกสารโหลดเสร็จ
 document.addEventListener('DOMContentLoaded', (event) => {
