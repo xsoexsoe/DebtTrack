@@ -34,12 +34,12 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td class="text-center align-middle">${joinRow.bill_month || '-'}</td>
                 <td class="text-center align-middle">${joinRow.id_pea || '-'}</td>
                 <td class="text-center align-middle">${joinRow.pea_position || '-'}</td>
                 <td class="text-center align-middle">${joinRow.ca || '-'}</td>
                 <td class="text-center align-middle">${joinRow.name || '-'}</td>
-                <td class="text-center align-middle">${joinRow.bill_month || '-'}</td>
-                <td class="text-end align-middle">${joinRow.money || '-'}</td>
+                <td class="text-end align-middle">${joinRow.money.toFixed(2) || '-'}</td>
                 <td class="text-center align-middle">${joinRow.id_command || '-'}</td>
                 <td style="text-align: center; vertical-align: middle;">
   <span class="badge ${joinRow.status === 'ชำระแล้ว' ? 'bg-success' : (joinRow.status === 'ดำเนินการแล้ว' ? 'bg-primary' : 'bg-warning')} rounded-pill" style="display: inline-block; width: 100%; padding: 10px;">

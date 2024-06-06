@@ -14909,3 +14909,10 @@ html, body {
 .image-container img {
   width: 100%;
 }
+@page {
+  size: A4 landscape;
+  margin: 5mm;
+}
+.small-font {
+  font-size: 12px;
+}

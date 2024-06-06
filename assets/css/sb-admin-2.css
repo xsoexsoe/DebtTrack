@@ -10507,7 +10507,7 @@ a:focus {
   color: rgba(255, 255, 255, 0.5);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1400px) {
   .sidebar {
     width: 14rem !important;
   }

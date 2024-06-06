@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/sb-admin-2.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alexandria&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <h5 class="text-center">รายละเอียดการพิจารณา ตามหลักเกณฑ์การพิจารณาและขอบเขตความรับผิดชอบ กรณีลูกหนี้ค่าไฟฟ้าค้างชำระฯ</h5>
+    <table class="table table-bordered small-font" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr class="text-center align-middle">
+                <th class="text-center align-middle" rowspan="2">บิลเดือน</th>
+                <th class="text-center align-middle" rowspan="2">จดหน่วย</th>
+                <th class="text-center align-middle" colspan="2">วันที่ รอบการอ่านหน่วย</th>
+                <th class="text-center align-middle"rowspan="2">จำนวนวันรอบการใช้ไฟฟ้า</th>
+                <th class="text-center align-middle" rowspan="2">จำนวนเงินหลังโอนหักเงินประกันรวม VAT 7%</th>
+                <th class="text-center align-middle" rowspan="2">ผบป./ผบง.</th>
+                <th class="text-center align-middle" rowspan="2">ระบบอนุมัติจ่ายไฟ</th>
+                <th class="text-center align-middle" rowspan="2">พบช.สั่งงดจ่ายไฟ</th>
+                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ผ่อนผัน ครั้งที่ 1</th>
+                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ผ่อนผัน ครั้งที่ 2</th>
+                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ถอดมิเตอร์</th>
+                <th class="text-center align-middle" rowspan="2">ส่งมิเตอร์คืนคลัง</th>
+                <th class="text-center align-middle" rowspan="2">รับมิเตอร์คืนคลัง</th>
+                <th class="text-center align-middle" colspan="3">สัดส่วนความรับผิดชอบ (วัน) ที่ปฎิบัติงานล่าช้า</th>
+                <th class="text-center align-middle" rowspan="2">ชำระเงิน</th>
+                <th class="text-center align-middle" colspan="4">ความรับผิดชอบ (บาท)</th>
+            </tr>
+            <tr class="text-center align-middle">
+                <th class="text-center align-middle">ก่อน</th>
+                <th class="text-center align-middle">หลัง</th>
+                <th class="text-center align-middle">พบช.</th>
+                <th class="text-center align-middle">ผู้รับจ้าง</th>
+                <th class="text-center align-middle">กฟภ.</th>
+                <th class="text-center align-middle">พบช.</th>
+                <th class="text-center align-middle">ผู้รับจ้าง</th>
+                <th class="text-center align-middle">กฟภ.</th>   
+                <th class="text-center align-middle">พชง.<br>คืนคลัง</th>
+            </tr>
+        </thead>
+        <tbody id="tableform">
+            <!-- Data will be populated dynamically -->
+        </tbody>
+    </table>
+
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="assets/js/sb-admin-2.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="form.js"></script>
+</body>
+</html>

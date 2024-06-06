@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Form - DebtTrack</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/sb-admin-2.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alexandria&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
@@ -158,35 +158,36 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered small-font" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-                                            <tr class="text-center align-middle">
-                                                <th rowspan="2">บิลเดือน</th>
-                                                <th rowspan="2">งดหน่วย</th>
-                                                <th colspan="2">วันที่ รอบการอ่านหน่วย</th>
-                                                <th rowspan="2">จำนวนวันรอบการใช้ไฟฟ้า</th>
-                                                <th rowspan="2">จำนวนเงินหลังโอนหักเงินประกันรวม VAT 7%</th>
-                                                <th colspan="4">ผบ./ผบช.</th>
-                                                <th colspan="4">ผจจ.สั่งจดจ่ายไฟ</th>
-                                                <th colspan="3">ผจจ.ถอดมิเตอร์</th>
-                                                <th colspan="4">ความรับผิดชอบ (บาท)</th>
+                                            <tr class="text-center align-middle ">
+                                                <th class="text-center align-middle" rowspan="2">บิลเดือน</th>
+                                                <th class="text-center align-middle" rowspan="2">จดหน่วย</th>
+                                                <th class="text-center align-middle" colspan="2">วันที่ รอบการอ่านหน่วย</th>
+                                                <th class="text-center align-middle"rowspan="2">จำนวนวันรอบการใช้ไฟฟ้า</th>
+                                                <th class="text-center align-middle" rowspan="2">จำนวนเงินหลังโอนหักเงินประกันรวม VAT 7%</th>
+                                                <th class="text-center align-middle" rowspan="2">ผบป./ผบง.</th>
+                                                <th class="text-center align-middle" rowspan="2">ระบบอนุมัติจ่ายไฟ</th>
+                                                <th class="text-center align-middle" rowspan="2">พบช.สั่งงดจ่ายไฟ</th>
+                                                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ผ่อนผัน ครั้งที่ 1</th>
+                                                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ผ่อนผัน ครั้งที่ 2</th>
+                                                <th class="text-center align-middle" rowspan="2">ผรจ.<br>ถอดมิเตอร์</th>
+                                                <th class="text-center align-middle" rowspan="2">ส่งมิเตอร์คืนคลัง</th>
+                                                <th class="text-center align-middle" rowspan="2">รับมิเตอร์คืนคลัง</th>
+                                                <th class="text-center align-middle" colspan="3">สัดส่วนความรับผิดชอบ (วัน) ที่ปฎิบัติงานล่าช้า</th>
+                                                <th class="text-center align-middle" rowspan="2">ชำระเงิน</th>
+                                                <th class="text-center align-middle" colspan="4">ความรับผิดชอบ (บาท)</th>
                                             </tr>
                                             <tr class="text-center align-middle">
-                                                <th>ก่อน</th>
-                                                <th>หลัง</th>
-                                                <th>อนุมัติจ่ายไฟ</th>
-                                                <th>ระบบอนุมัติจ่ายไฟ</th>
-                                                <th>วันที่สั่งจ่ายไฟ</th>
-                                                <th>จ่ายไฟ<br>SAP</th>
-                                                <th>อนุมัติจ่ายไฟ</th>
-                                                <th>วันที่บันทึกอนุมัติ</th>
-                                                <th>ถอดมิเตอร์</th>
-                                                <th>ส่งมิเตอร์คืนคลัง</th>
-                                                <th>รับมิเตอร์คืนคลัง</th>
-                                                <th>พชง.งดจ่ายไฟ</th>
-                                                <th>พชบ.</th>
-                                                <th>ผู้รับจ้าง</th>
-                                                <th>กฟก.</th>
+                                                <th class="text-center align-middle">ก่อน</th>
+                                                <th class="text-center align-middle">หลัง</th>
+                                                <th class="text-center align-middle">พบช.</th>
+                                                <th class="text-center align-middle">ผู้รับจ้าง</th>
+                                                <th class="text-center align-middle">กฟภ.</th>
+                                                <th class="text-center align-middle">พบช.</th>
+                                                <th class="text-center align-middle">ผู้รับจ้าง</th>
+                                                <th class="text-center align-middle">กฟภ.</th>   
+                                                <th class="text-center align-middle">พชง.<br>คืนคลัง</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableform">
@@ -199,14 +200,14 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
                 <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
             </div>
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
+</div>
     <script src="assets/vendor/jquery/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
