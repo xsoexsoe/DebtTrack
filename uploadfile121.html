@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>DebTrack</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/sb-admin-2.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alexandria&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
@@ -20,16 +20,34 @@
 </head>
 
 <body>
-    <div id="wrapper">
-        <div class="d-flex flex-column" id="content-wrapper">
-            <div id="content">
-                <nav class="navbar navbar-expand shadow mb-4 topbar static-top navbar-light" style="background:linear-gradient(#bc4bb0 0%, #9b3790 100%), #9b3790;">
-                    <div class="container-fluid"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
-                            <div><img src="assets/img/โลโก้.png" width="46" height="44" style="margin:0px;padding:0px;display:inline;overflow:visible;"></div>
-                            <div class="sidebar-brand-text mx-3"><span class="text-capitalize fs-4 custom-font" style="font-size: 21px;font-weight: bold;color: rgb(255, 255, 255);"><span>DebtTrack</span></span></div><span style="color: rgb(255, 255, 255);">อัพโหลดไฟล์ 121</span>
-                        </a><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button></div>
+   
+
+    
+
+        
+         
+    <!-- ตัวห่อหุ้มเนื้อหา -->
+   <div id="content-wrapper" class="d-flex flex-column">
+        <!-- เนื้อหาหลัก -->
+        <div id="content">
+                <!-- แถบด้านบน -->
+                <nav class="navbar navbar-expand justify-content-center navbar-light bg-white topbar mb-4 static-top shadow">
+
+                  <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
+                  <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" href="index.html">
+                      <div class="sidebar-brand-text mx-3">
+                          <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
+                      </div> 
+                  </a>
+                  <div class="mb-3 mb-md-0 me-md-auto justify-content-center">
+                    <span class="text-capitalize fs-4 custom-font justify-content-center" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">uploadExcel121</span>
+                  </div>
+                  
                 </nav>
-            </div>
+              <!-- จบแถบด้านบน -->
+
+        <div class="d-flex flex-column" id="content-wrapper">
+            
             <div class="container py-4 py-xl-5" style="margin-bottom: -47px;">
                 <div class="files color form-group mb-3"><input type="file" multiple="" id="fileInput" accept=".xls, .xlsx" name="files"></div>
             </div>
