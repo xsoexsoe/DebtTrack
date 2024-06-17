@@ -10,10 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alexandria&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/css/MUSA_panel-table-panel-table.css">
-    <link rel="stylesheet" href="assets/css/MUSA_panel-table.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/Drag-Drop-File-Input-Upload.css">
     <link rel="stylesheet" href="assets/css/Hero-Clean-images.css">
     <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
@@ -21,105 +18,107 @@
 
 <body id="page-top">
 
-    <!-- ตัวห่อหุ้มของหน้าเพจ -->    
+     <!-- ตัวห่อหุ้มของหน้าเพจ -->    
     <div id="wrapper">
-
-        <!-- แถบด้านข้าง -->
-         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            
-            <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
-             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <!-- ไอคอนโลโก้ -->
-                 <div class="sidebar-brand-icon">
-                    <img src="assets/img/โลโก้.png"  width="46" height="44" alt="">
-                 </div>
-                 <!-- <div class="sidebar-brand-text mx-3 text-capitalize custom-font" style="font-size: 21px;font-weight: bold;">DebtTrack</div> -->
-
-             </a>
-
-             <!-- เส้นแบ่ง -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- รายการนำทาง - แดชบอร์ด -->
-            <li class="nav-item ">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span class="custom-font" style="font-size: 16px;font-weight: bold;">Dashboard</span></a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="uploadfile.html">
-                    <i class="fas fa-fw fa-upload"></i>
-                    <span class="custom-font" style="font-size: 16px;font-weight: bold;">Upload File</span></a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="table.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 16px;">รายละเอียดลูกหนี้</span></a>
-            </li>
-
-            <!-- เส้นแบ่ง -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- ปุ่มเลื่อนเนื้อหา -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-         </ul>
-
-           <!-- ตัวห่อหุ้มเนื้อหา -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- เนื้อหาหลัก -->
-            <div id="content">
-
-                <!-- แถบด้านบน -->
-                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    
+            <!-- แถบด้านข้าง -->
+             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 
-                    <!-- ปุ่มแถบด้านข้าง -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+                <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
+                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                    <!-- ไอคอนโลโก้ -->
+                     <div class="sidebar-brand-icon">
+                        <img src="assets/img/โลโก้.png"  width="46" height="44" alt="">
+                     </div>
+                     <!-- <div class="sidebar-brand-text mx-3 text-capitalize custom-font" style="font-size: 21px;font-weight: bold;">DebtTrack</div> -->
+    
+                 </a>
+    
+                 <!-- เส้นแบ่ง -->
+                <hr class="sidebar-divider my-0">
+    
+                <!-- รายการนำทาง - แดชบอร์ด -->
+                <li class="nav-item ">
+                    <a class="nav-link" href="index.html">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span class="custom-font" style="font-size: 16px;font-weight: bold;">Dashboard</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="uploadfile.html">
+                        <i class="fas fa-fw fa-upload"></i>
+                        <span class="custom-font" style="font-size: 16px;font-weight: bold;">Upload File</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="table.html">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 16px;">รายละเอียดลูกหนี้</span></a>
+                </li>
+    
+                <!-- เส้นแบ่ง -->
+                <hr class="sidebar-divider d-none d-md-block">
+    
+                <!-- ปุ่มเลื่อนเนื้อหา -->
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
+    
+             </ul>
+    
+               <!-- ตัวห่อหุ้มเนื้อหา -->
+            <div id="content-wrapper" class="d-flex flex-column">
+    
+                <!-- เนื้อหาหลัก -->
+                <div id="content">
+    
+                    <!-- แถบด้านบน -->
+                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     
-                    <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
-                    <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
-                        <div class="sidebar-brand-text mx-3">
-                            <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
-                        </div> 
-                    </a>
-                 </nav>
-                <div class="container-fluid">
-                    
-                    <br>
-                    <div class="row">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a class="btn btn-primary btn-icon-split"  href="uploadfile121.html" >
-                                <span class="icon text-white-50">  
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="text">อัพโหลดไฟล์ลูกหนี้ 121</span>
-                            </a>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a class="btn btn-primary btn-icon-split"  href="uploadfile121.html" >
-                                <span class="icon text-white-50">  
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="text">อัพโหลดไฟล์ ZCANR030</span>
-                            </a>
+                        <!-- ปุ่มแถบด้านข้าง -->
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        
+                        <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
+                        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
+                            <div class="sidebar-brand-text mx-3">
+                                <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
+                            </div> 
+                        </a>
+                     </nav>
+                <!-- จบแถบด้านบน -->
+
+                    <div class="container-fluid">
+                        
+                        <br>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <a class="btn btn-primary btn-icon-split"  href="uploadfile121.html" >
+                                    <span class="icon text-white-50">  
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="text">อัพโหลดไฟล์ลูกหนี้ 121</span>
+                                </a>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <a class="btn btn-primary btn-icon-split"  href="uploadfile121.html" >
+                                    <span class="icon text-white-50">  
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="text">อัพโหลดไฟล์ ZCANR030</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
                     
-                </div>
             </div>
+        </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
                     <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
                 </div>
             </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/theme.js"></script>
