@@ -59,15 +59,13 @@ function calculateAfterDate(beforeDate) {
 // ฟังก์ชันคำนวณจำนวนวันระหว่างสองวันที่
 function calculateDaysBetween(startDate, endDate) {
     const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round((endDate - startDate) / oneDay) + 1; // เพิ่ม 1 วัน
+    return Math.round((endDate - startDate) / oneDay) + 1;// เพิ่ม 1 วัน
 }
 
 // ฟังก์ชันเติมข้อมูลในตาราง
 function populateTableWithFilteredData(sumMoneyResults, countResults, joinResults, customerHasBillsResults, params) {
     const tableBody = document.getElementById('tableform');
     const portion = document.getElementById('portion').value;
-
-    tableBody.innerHTML = ''; // เคลียร์ข้อมูลตารางก่อนเติมข้อมูลใหม่
 
     joinResults.forEach(joinRow => {
         if (joinRow.customer_ca === params.customer_ca && joinRow.id_command === params.id_command) {
@@ -90,21 +88,22 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
             const beforeDateFormatted = formatDate(beforeDate);
             const afterDateFormatted = formatDate(afterDate);
 
-            // สร้างแถวใหม่
-            const tr = document.createElement('tr');
-            tr.setAttribute('data-id', joinRow.id);
+            // ค้นหาแถวที่มีอยู่แล้ว
+            let tr = tableBody.querySelector(`tr[data-id="${joinRow.id}"]`);
             
+            if (!tr) {
+                // สร้างแถวใหม่ถ้ายังไม่มี
+                tr = document.createElement('tr');
+                tr.setAttribute('data-id', joinRow.id);
+                tableBody.appendChild(tr);
+            }
+
+            // อัปเดตข้อมูลในแถว
             tr.innerHTML = `
                 <td class="text-center align-middle">${billMonth}</td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input" value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
-                </td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input" value="${beforeDateFormatted}" data-id="${joinRow.id}" data-type="before">
-                </td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input " value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
-                </td>
+                <td class="text-center align-middle">${afterDateFormatted}</td>
+                <td class="text-center align-middle">${beforeDateFormatted}</td>
+                <td class="text-center align-middle">${afterDateFormatted}</td>
                 <td class="text-center align-middle">${daysBetween}</td>
                 <td class="text-center align-middle">${joinRow.pea_position || '-'}</td>
                 <td class="text-center align-middle">${joinRow.ca || '-'}</td>
@@ -112,32 +111,6 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 <td class="text-end align-middle">${joinRow.money.toFixed(2) || '-'}</td>
                 <td class="text-center align-middle">${joinRow.id_command || '-'}</td>
             `;
-
-            tableBody.appendChild(tr);
-
-            // ตั้งค่า flatpickr
-            flatpickr(`input[data-id="${joinRow.id}"][data-type="before"]`, {
-                dateFormat: "d.m.Y",
-                onChange: function(selectedDates, dateStr, instance) {
-                    const afterInput = document.querySelector(`input[data-id="${joinRow.id}"][data-type="after"]`);
-                    const beforeDate = new Date(selectedDates[0]);
-                    let afterDate = calculateAfterDate(beforeDate);
-                    afterInput.value = formatDate(afterDate);
-                    const daysBetween = calculateDaysBetween(beforeDate, afterDate);
-                    tr.querySelector('.text-center.align-middle:nth-child(5)').innerText = daysBetween;
-                }
-            });
-
-            flatpickr(`input[data-id="${joinRow.id}"][data-type="after"]`, {
-                dateFormat: "d.m.Y",
-                onChange: function(selectedDates, dateStr, instance) {
-                    const beforeInput = document.querySelector(`input[data-id="${joinRow.id}"][data-type="before"]`);
-                    const afterDate = new Date(selectedDates[0]);
-                    const beforeDate = new Date(beforeInput.value.split('.').reverse().join('-'));
-                    const daysBetween = calculateDaysBetween(beforeDate, afterDate);
-                    tr.querySelector('.text-center.align-middle:nth-child(5)').innerText = daysBetween;
-                }
-            });
         }
     });
 }
@@ -163,6 +136,7 @@ document.getElementById('portion').addEventListener('change', function() {
         })
         .catch(error => console.error('Error fetching data:', error));
 });
+
 
 // ฟังก์ชันเพื่อเติมข้อมูลในฟอร์มด้วย query parameters
 function populateForm(params) {
@@ -212,6 +186,7 @@ fetch('http://localhost:5500/data')
         populateTableWithFilteredData(data.sumMoneyResults, data.countResults, data.joinResults, data.customerHasBillsResults, params);
     })
     .catch(error => console.error('Error fetching data:', error));
+
 
 // ฟังก์ชันเพื่อส่งข้อมูลฟอร์มไปยังเซิร์ฟเวอร์
 document.getElementById('dataForm').addEventListener('submit', function (e) {

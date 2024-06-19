@@ -2713,7 +2713,7 @@ progress {
   margin-inline-end: 1rem;
 }
 
-textarea.form-control, textarea.datatable-input {
+textarea.form-control, textarea.dataf-input {
   min-height: calc(1.5em + 0.75rem + 2px);
 }
 
