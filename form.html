@@ -10,12 +10,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  
 </head>
 <body id="page-top">
     <!-- ตัวห่อหุ้มของหน้าเพจ -->    
     <div id="wrapper">
-    
+
         <!-- แถบด้านข้าง -->
          <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             
@@ -60,150 +59,159 @@
          </ul>
 
            <!-- ตัวห่อหุ้มเนื้อหา -->
-            <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d-flex flex-column">
 
-                <!-- เนื้อหาหลัก -->
-                <div id="content">
+            <!-- เนื้อหาหลัก -->
+            <div id="content">
 
-                    <!-- แถบด้านบน -->
-                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- แถบด้านบน -->
+                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                
+                    <!-- ปุ่มแถบด้านข้าง -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
                     
-                        <!-- ปุ่มแถบด้านข้าง -->
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        
-                        <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
-                        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
-                            <div class="sidebar-brand-text mx-3">
-                                <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
-                            </div> 
-                        </a>
-                    </nav>
+                    <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
+                    <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
+                        <div class="sidebar-brand-text mx-3">
+                            <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
+                        </div> 
+                    </a>
+                 </nav>
                 <!-- จบแถบด้านบน -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card shadow border-start-primary py-2 form-container" style="background:#f6c9ff;">
-                                    <header class="text-center text-primary" style="background:linear-gradient(#b744d5, #893a9d), #893a9d;">
-                                        <span class="text-center" style="font-family:Prompt, sans-serif;"><span style="color: rgb(255, 255, 255);font-family: Prompt, sans-serif; font-size: 24px;">ฟอร์มกรอกข้อมูล</span></span>
-                                    </header>
-                                    <div class="card-body">
-                                        <form id="dataForm">
-                                            <div class="row">
-                                                <div class="col text-center">
-                                                    <label for="id_command" class="form-label">คำสั่ง</label>
-                                                    <input type="text" class="form-control text-center" id="id_command" required disabled>
-                                                </div>
-                                                <div class="col text-center">
-                                                    <label for="customer_ca" class="form-label">หมายเลขผู้ใช้ไฟ</label>
-                                                    <input type="text" class="form-control text-center" id="customer_ca" required disabled>
-                                                </div>
-                                                <div class="col-xl-3 col-md-6 mb-4 text-center">
-                                                    <label for="name" class="form-label">ชื่อ-สกุล</label>
-                                                    <input type="text" class="form-control text-center" id="name" required disabled>
-                                                </div>
-                                                <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                                    <label for="num_bills" class="form-label">จำนวนบิล</label>
-                                                    <input type="text" class="form-control text-center" id="num_bills" required disabled>
-                                                </div>
-                                                <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                                    <label for="total_money" class="form-label">จำนวนเงิน</label>
-                                                    <input type="text" class="form-control text-end" id="total_money" required disabled>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow border-start-primary py-2 form-container" style="background:#f6c9ff;">
+                                <header class="text-center text-primary" style="background:linear-gradient(#b744d5, #893a9d), #893a9d;">
+                                    <span class="text-center" style="font-family:Prompt, sans-serif;"><span style="color: rgb(255, 255, 255);font-family: Prompt, sans-serif; font-size: 24px;">ฟอร์มกรอกข้อมูล</span></span>
+                                </header>
+                                <div class="card-body">
+                                    <form id="dataForm">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <label for="id_command" class="form-label">คำสั่ง</label>
+                                                <input type="text" class="form-control text-center" id="id_command" required disabled>
+                                            </div>
+                                            <div class="col text-center">
+                                                <label for="customer_ca" class="form-label">หมายเลขผู้ใช้ไฟ</label>
+                                                <input type="text" class="form-control text-center" id="customer_ca" required disabled>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6 mb-4 text-center">
+                                                <label for="name" class="form-label">ชื่อ-สกุล</label>
+                                                <input type="text" class="form-control text-center" id="name" required disabled>
+                                            </div>
+                                            <div class="col-xl-2 col-md-6 mb-4 text-center">
+                                                <label for="num_bills" class="form-label">จำนวนบิล</label>
+                                                <input type="text" class="form-control text-center" id="num_bills" required disabled>
+                                            </div>
+                                            <div class="col-xl-2 col-md-6 mb-4 text-center">
+                                                <label for="total_money" class="form-label">จำนวนเงิน</label>
+                                                <input type="text" class="form-control text-end" id="total_money" required disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="date_system" class="form-label">ระบบอนุมัติ</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_system" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="date_system" class="form-label">ระบบอนุมัติ</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_system" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="date_employee" class="form-label">วันที่พนักงานสั่งตัด</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_employee" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="date_company" class="form-label">วันที่ผู้รับเหมาตัด</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_company" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_company"><i class="fas fa-times" style="color: crimson;"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="date_deferment" class="form-label">วันที่ผ่อนผัน</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_deferment" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="col text-center">
-                                                    <label for="portion" class="form-label">เลือก Portion</label>
-                                                    <select class="form-control" id="portion">
-                                                        <option value="A1">Portion A1</option>
-                                                        <option value="A2">Portion A2</option>
-                                                        <option value="A3">Portion A3</option>
-                                                        <option value="A4">Portion A4</option>
-                                                        <option value="B1">Portion B1</option>
-                                                        <option value="B2">Portion B2</option>
-                                                        <option value="B3">Portion B3</option>
-                                                        <option value="B4">Portion B4</option>
-                                                        <option value="C1">Portion C1</option>
-                                                        <option value="C2">Portion C2</option>
-                                                        <option value="C3">Portion C3</option>
-                                                        <option value="C4">Portion C4</option>
-                                                        <option value="D1">Portion D1</option>
-                                                        <option value="D2">Portion D2</option>
-                                                        <option value="D3">Portion D3</option>
-                                                        <option value="D4">Portion D4</option>
-                                                    </select>
+                                            <div class="col">
+                                                <label for="date_employee" class="form-label">วันที่พนักงานสั่งตัด</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_employee" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="file1" class="form-label">Upload File 1</label>
-                                                    <input type="file" class="form-control" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
-                                                    <div class="image-container">
-                                                        <img id="preview1" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="file2" class="form-label">Upload File 2</label>
-                                                    <input type="file" class="form-control" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
-                                                    <div class="image-container">
-                                                        <img id="preview2" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
-                                                    </div>
+                                            <div class="col">
+                                                <label for="date_company" class="form-label">วันที่ผู้รับเหมาตัด</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_company" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_company"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
-                                            <br>
-                                            <div class="row justify-content-center">
-                                                <div class="col text-center">
-                                                    <button type="button" id="calculateButton" class="btn btn-primary" style="height: 50px; width: 200px;">คำนวณ</button>
-                                                </div>
-                                                <div class="col text-center">
-                                                    <button type="button" id="printButton" class="btn btn-secondary" style="height: 50px; width: 200px;">ปริ้น</button>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="row justify-content-center">
-                                                <div class="col text-center">
-                                                    <button type="submit" class="btn btn-primary" style="height: 50px; width: 200px;">บันทึก</button>
+                                            <div class="col">
+                                                <label for="date_deferment" class="form-label">วันที่ผ่อนผัน</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_deferment" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                            <div class="col">
+                                                <label for="date_deferment2" class="form-label">วันที่ผ่อนผัน ครั้งที่ 2</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="date_deferment2" required>
+                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment2"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment2"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <label for="portion" class="form-label">เลือก Portion</label>
+                                                <select class="form-control" id="portion">
+                                                    <option value="A1">Portion A1</option>
+                                                    <option value="A2">Portion A2</option>
+                                                    <option value="A3">Portion A3</option>
+                                                    <option value="A4">Portion A4</option>
+                                                    <option value="B1">Portion B1</option>
+                                                    <option value="B2">Portion B2</option>
+                                                    <option value="B3">Portion B3</option>
+                                                    <option value="B4">Portion B4</option>
+                                                    <option value="C1">Portion C1</option>
+                                                    <option value="C2">Portion C2</option>
+                                                    <option value="C3">Portion C3</option>
+                                                    <option value="C4">Portion C4</option>
+                                                    <option value="D1">Portion D1</option>
+                                                    <option value="D2">Portion D2</option>
+                                                    <option value="D3">Portion D3</option>
+                                                    <option value="D4">Portion D4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="file1" class="form-label">Upload File 1</label>
+                                                <input type="file" class="form-control" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
+                                                <div class="image-container">
+                                                    <img id="preview1" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="file2" class="form-label">Upload File 2</label>
+                                                <input type="file" class="form-control" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
+                                                <div class="image-container">
+                                                    <img id="preview2" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row justify-content-center">
+                                            <div class="col text-center">
+                                                <button type="button" id="calculateButton" class="btn btn-primary" style="height: 50px; width: 200px;">คำนวณ</button>
+                                            </div>
+                                            <div class="col text-center">
+                                                <button type="button" id="printButton" class="btn btn-secondary" style="height: 50px; width: 200px;">ปริ้น</button>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row justify-content-center">
+                                            <div class="col text-center">
+                                                <button type="submit" class="btn btn-primary" style="height: 50px; width: 200px;">บันทึก</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <br>
                     <div class="container-fluid">
                         <div class="card shadow mb-5">

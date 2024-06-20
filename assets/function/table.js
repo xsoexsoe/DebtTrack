@@ -48,7 +48,7 @@ function populateTable(sumMoneyResults, countResults, joinResults) {
             <td class="text-center align-middle">${countRow ? countRow.count_bills : '-'}</td>
             <td class="text-end align-middle">${sumRow.total_money.toFixed(2)}</td>
             <td class="text-center align-middle">${sumRow.id_command}</td>
-            <td><span class="badge ${joinRow.status === 'ชำระแล้ว' ? 'bg-success' : (joinRow.status === 'ดำเนินการแล้ว' ? 'bg-primary' : 'bg-warning')} rounded-pill" style="display: inline-block; width: 100%; padding: 10px;">
+            <td><span class="badge ${joinRow.status === 'ชำระเงินเรียบร้อยแล้ว' ? 'bg-success' : (joinRow.status === 'ดำเนินการแล้ว' ? 'bg-primary' : 'bg-warning')} rounded-pill" style="display: inline-block; width: 100%; padding: 10px;">
     ${joinRow.status || '-'}</td>
             <td><a class="btn btn-outline-warning btn-sm d-none d-sm-inline-block" role="button" href="form.html?id_command=${sumRow.id_command}&customer_ca=${sumRow.customer_ca}&total_money=${sumRow.total_money}&name=${joinRow ? joinRow.name : '-'}&num_bills=${countRow ? countRow.count_bills : '-'}"><i class="fas fa-edit text-yellow-50 fa-sm"></i>&nbsp;แก้ไข</a></td>
         `;

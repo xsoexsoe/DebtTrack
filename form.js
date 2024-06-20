@@ -16,6 +16,13 @@ const portionAdjustments = {
     'C1': 8, 'C2': 9, 'C3': 10, 'C4': 11,
     'D1': 12, 'D2': 13, 'D3': 14, 'D4': 15
 };
+// ฟังก์ชันแปลงปีเป็น พ.ศ.
+function convertToBuddhistYear(date) {
+    const year = date.getFullYear();
+    const buddhistYear = year;
+    return new Date(date.setFullYear(buddhistYear));
+}
+
 
 // ฟังก์ชันคำนวณวันที่ก่อน
 function calculateBeforeDate(billMonth) {
@@ -96,21 +103,24 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
             
             tr.innerHTML = `
                 <td class="text-center align-middle">${billMonth}</td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input" value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
+                <td class="text-center align-middle after-col">
+                    <input type="text" class="form-control flatpickr-input" style="font-size:0.8rem" value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
                 </td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input" value="${beforeDateFormatted}" data-id="${joinRow.id}" data-type="before">
+                <td class="text-center align-middle before-col">
+                    <input type="text" class="form-control flatpickr-input" style="font-size:0.8rem" value="${beforeDateFormatted}" data-id="${joinRow.id}" data-type="before">
                 </td>
-                <td class="text-center align-middle after-col" >
-                    <input type="text" class="form-control flatpickr-input " value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
+                <td class="text-center align-middle after-col">
+                    <input type="text" class="form-control flatpickr-input" style="font-size:0.8rem" value="${afterDateFormatted}" data-id="${joinRow.id}" data-type="after">
                 </td>
                 <td class="text-center align-middle">${daysBetween}</td>
-                <td class="text-center align-middle">${joinRow.pea_position || '-'}</td>
-                <td class="text-center align-middle">${joinRow.ca || '-'}</td>
-                <td class="text-center align-middle">${joinRow.name || '-'}</td>
                 <td class="text-end align-middle">${joinRow.money.toFixed(2) || '-'}</td>
-                <td class="text-center align-middle">${joinRow.id_command || '-'}</td>
+                <td class="text-center align-middle">-</td>
+                <td class="text-center align-middle date-system">${dateSystemFormatted}</td>
+                <td class="text-center align-middle date-employee"></td>
+                <td class="text-center align-middle date-deferment"></td>
+                <td class="text-center align-middle date-deferment2"></td>
+                <td class="text-center align-middle date-company"></td>
+                
             `;
 
             tableBody.appendChild(tr);
@@ -133,7 +143,7 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 onChange: function(selectedDates, dateStr, instance) {
                     const beforeInput = document.querySelector(`input[data-id="${joinRow.id}"][data-type="before"]`);
                     const afterDate = new Date(selectedDates[0]);
-                    const beforeDate = new Date(beforeInput.value.split('.').reverse().join('-'));
+                    const beforeDate = new Date(beforeInput.value.split('-').reverse().join('-'));
                     const daysBetween = calculateDaysBetween(beforeDate, afterDate);
                     tr.querySelector('.text-center.align-middle:nth-child(5)').innerText = daysBetween;
                 }
@@ -143,13 +153,72 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
 }
 
 // ฟังก์ชันจัดรูปแบบวันที่ให้แสดงเฉพาะวันที่
-function formatDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const year = date.getFullYear();
+function formatDate(date) {
+    if (!date) return '';
+    const buddhistYear = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${day}.${month}.${year}`;
+    return `${day}.${month}.${buddhistYear}`;
+}
+
+// ฟังก์ชันอัปเดตคอลัมน์ "ระบบอนุมัติจ่ายไฟ"
+function updateApprovalDates(date) {
+    const formattedDate = formatDate(date);
+    const tableBody = document.getElementById('tableform');
+    const rows = tableBody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const dateSystemCell = row.querySelector('.date-system');
+        dateSystemCell.innerText = formattedDate;
+    });
+}
+
+// ฟังก์ชันอัปเดตคอลัมน์ "พบช.สั่งงดจ่ายไฟ"
+function updateEmployeeDates(date) {
+    const formattedDate = formatDate(date);
+    const tableBody = document.getElementById('tableform');
+    const rows = tableBody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const dateEmployeeCell = row.querySelector('.date-employee');
+        dateEmployeeCell.innerText = formattedDate;
+    });
+}
+
+// ฟังก์ชันอัปเดตคอลัมน์ "ผรจ.ถอดมิเตอร์"
+function updateCompanyDates(date) {
+    const formattedDate = formatDate(date);
+    const tableBody = document.getElementById('tableform');
+    const rows = tableBody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const dateCompanyCell = row.querySelector('.date-company');
+        dateCompanyCell.innerText = formattedDate;
+    });
+}
+
+// ฟังก์ชันอัปเดตคอลัมน์ "ผรจ.ผ่อนผัน ครั้งที่ 1"
+function updateDefermentDates(date) {
+    const formattedDate = formatDate(date);
+    const tableBody = document.getElementById('tableform');
+    const rows = tableBody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const dateDefermentCell = row.querySelector('.date-deferment');
+        dateDefermentCell.innerText = formattedDate;
+    });
+}
+
+// ฟังก์ชันอัปเดตคอลัมน์ "ผรจ.ผ่อนผัน ครั้งที่ 2"
+function updateDeferment2Dates(date) {
+    const formattedDate = formatDate(date);
+    const tableBody = document.getElementById('tableform');
+    const rows = tableBody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const dateDeferment2Cell = row.querySelector('.date-deferment2');
+        dateDeferment2Cell.innerText = formattedDate;
+    });
 }
 
 // Event listener สำหรับ dropdown
@@ -260,11 +329,11 @@ fetch('http://localhost:5500/holidays')
     });
 
 function initializeFlatpickr() {
-    const dateInputs = ['#date_system', '#date_employee', '#date_company', '#date_deferment'];
+    const dateInputs = ['#date_system', '#date_employee', '#date_company', '#date_deferment', '#date_deferment2'];
 
     dateInputs.forEach(id => {
         const datepicker = flatpickr(id, {
-            dateFormat: "Y-m-d",
+            dateFormat: "d-m-Y",
             allowInput: true,
             disable: [
                 function(date) {
@@ -281,6 +350,31 @@ function initializeFlatpickr() {
                 if (holidayDescriptions[date]) {
                     dayElem.setAttribute('title', holidayDescriptions[date]);
                     dayElem.classList.add('holiday');
+                }
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                // แปลงวันที่เป็น พ.ศ.
+                const buddhistDate = convertToBuddhistYear(new Date(selectedDates[0]));
+                const buddhistDateStr = flatpickr.formatDate(buddhistDate, "d.m.Y");
+
+                instance.input.value = buddhistDateStr; // แสดงวันที่ในฟอร์แมต พ.ศ.
+
+                switch (id) {
+                    case '#date_system':
+                        updateApprovalDates(selectedDates[0]);
+                        break;
+                    case '#date_employee':
+                        updateEmployeeDates(selectedDates[0]);
+                        break;
+                    case '#date_company':
+                        updateCompanyDates(selectedDates[0]);
+                        break;
+                    case '#date_deferment':
+                        updateDefermentDates(selectedDates[0]);
+                        break;
+                    case '#date_deferment2':
+                        updateDeferment2Dates(selectedDates[0]);
+                        break;
                 }
             }
         });
@@ -335,6 +429,8 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     const dateSystem = new Date(document.getElementById('date_system').value);
     const dateEmployee = new Date(document.getElementById('date_employee').value);
     const dateCompany = new Date(document.getElementById('date_company').value);
+    const dateDeferment = new Date(document.getElementById('date_deferment').value);
+    const dateDeferment2 = new Date(document.getElementById('date_deferment2').value);
     const totalMoney = parseFloat(document.getElementById('total_money').value);
 
     // คำนวณจำนวนวันในเดือนที่ระบุ

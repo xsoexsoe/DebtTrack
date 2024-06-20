@@ -1524,10 +1524,10 @@ pre code {
   border-top: 1px solid #e3e6f0;
 }
 th.before-col, td.before-col {
-  min-width: 100px; /* กำหนดความกว้างของคอลัมน์ ก่อน */
+  min-width: 120px; /* กำหนดความกว้างของคอลัมน์ ก่อน */
 }
 th.after-col, td.after-col {
-  min-width: 100px; /* กำหนดความกว้างของคอลัมน์ หลัง */
+  min-width: 120px; /* กำหนดความกว้างของคอลัมน์ หลัง */
 }
 
 .table-layout{
@@ -1567,7 +1567,7 @@ th.after-col, td.after-col {
 }
 
 .table-bordered > :not(caption) > * > *, .datatable-table > :not(caption) > * > * {
-  border-width: 0 1px;
+  border-width: 1 1px;
 }
 
 
@@ -4894,7 +4894,6 @@ input[type="button"].btn-block {
   font-weight: 700;
   line-height: 1;
   text-align: center;
-  white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.35rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
