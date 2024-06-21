@@ -99,56 +99,101 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     });
 });
 
-const convertThaiToGregorian = (thaiDate) => {
+const convertExcelDateToJSDate = (serial) => {
+    const excelEpoch = new Date(Date.UTC(1899, 11, 30)); // Excel starts on 30 Dec 1899
+    const jsDate = new Date(excelEpoch.getTime() + (serial - 1) * 86400 * 1000);
+    return jsDate;
+};
+
+const convertThaiDateToGregorian = (thaiDate) => {
     if (typeof thaiDate !== 'string') {
         console.error('Invalid date format:', thaiDate);
         return null;
     }
-    
-    const [month, thaiYear] = thaiDate.split('.');
-    if (!month || !thaiYear) {
+
+    const [day, month, thaiYear] = thaiDate.split('/');
+    if (!day || !month || !thaiYear) {
         console.error('Invalid date format:', thaiDate);
         return null;
     }
-    
+
     const gregorianYear = parseInt(thaiYear, 10) - 543;
     return `${month}.${gregorianYear}`;
 };
 
+const isValidThaiDate = (date) => {
+    if (typeof date === 'string' && date.split('/').length === 3) {
+        return true;
+    }
+    return false;
+};
+
 app.post('/upload030', upload.single('file'), (req, res) => {
     if (!req.file) {
+        console.error('No file uploaded.');
         return res.status(400).json({ message: 'No file uploaded.' });
     }
 
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
+    console.log('Data read from Excel:', data);
 
     connection.beginTransaction(err => {
         if (err) {
             console.error('Error starting transaction:', err);
             return res.status(500).json({ message: 'Error starting transaction.' });
         }
+        console.log('Transaction started.');
 
         const updatePromises = data.map(row => {
             return new Promise((resolve, reject) => {
-                const gregorianBillMonth = convertThaiToGregorian(row.บิลเดือน);
+                let billMonth = row.บิลเดือน;
+
+                if (typeof billMonth === 'number') {
+                    // แปลงตัวเลขเป็นวันที่
+                    const dateObj = convertExcelDateToJSDate(billMonth);
+                    const day = dateObj.getUTCDate();
+                    const month = dateObj.getUTCMonth() + 1; // เดือนใน JavaScript เริ่มจาก 0
+                    const year = dateObj.getUTCFullYear();
+                    billMonth = `${day}/${month}/${year}`;
+                    console.log(`Converted numeric bill month to date: ${billMonth}`);
+                }
+
+                if (!isValidThaiDate(billMonth)) {
+                    console.error('Missing or invalid bill month for row:', row);
+                    return reject(new Error(`Missing or invalid bill month for row: ${JSON.stringify(row)}`));
+                }
+
+                const gregorianBillMonth = convertThaiDateToGregorian(billMonth);
+                if (!gregorianBillMonth) {
+                    console.error('Invalid date format for row:', row);
+                    return reject(new Error(`Invalid date format for row: ${JSON.stringify(row)}`));
+                }
+
                 const checkSql = 'SELECT * FROM bills WHERE customer_ca = ? AND bill_month = ?';
                 connection.query(checkSql, [row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
                     if (error) {
+                        console.error('Error executing SELECT query:', error);
                         return reject(error);
                     }
-                    if (results.length === 0) {
-                        // ถ้าไม่พบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
+                    console.log('SELECT query results:', results);
+
+                    if (results.length > 0) {
+                        
+                        // ถ้าพบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
                         const updateSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ?';
                         connection.query(updateSql, ['ชำระเงินเรียบร้อยแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
                             if (error) {
+                                console.error('Error executing UPDATE query:', error);
                                 return reject(error);
                             }
+                            console.log('UPDATE query results:', results);
                             resolve(results);
                         });
                     } else {
-                        resolve(null); // ไม่มีการอัปเดตถ้าพบข้อมูลตรงกัน
+                        console.log('No matching records found for:', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth);
+                        resolve(null); // ไม่มีการอัปเดตถ้าไม่พบข้อมูลตรงกัน
                     }
                 });
             });
@@ -163,6 +208,7 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                             res.status(500).json({ message: 'Error committing transaction.' });
                         });
                     }
+                    console.log('Transaction committed.');
                     res.json({ message: 'Data processed successfully.' });
                 });
             })
@@ -174,6 +220,7 @@ app.post('/upload030', upload.single('file'), (req, res) => {
             });
     });
 });
+
 
 // ฟังก์ชันเพื่อ query ข้อมูล
 function queryDatabase(sql) {
