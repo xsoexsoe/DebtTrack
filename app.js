@@ -117,8 +117,17 @@ const convertThaiDateToGregorian = (thaiDate) => {
         return null;
     }
 
-    const gregorianYear = parseInt(thaiYear, 10) - 543;
-    return `${month}.${gregorianYear}`;
+    let gregorianYear = parseInt(thaiYear, 10) - 543;
+    let gregorianMonth = parseInt(month, 10) + 1; // Add 1 month
+
+    if (gregorianMonth > 12) {
+        // If the month exceeds December, adjust the year and month accordingly
+        gregorianYear += 1;
+        gregorianMonth = 1; // January
+    }
+
+    const paddedMonth = gregorianMonth.toString().padStart(2, '0');
+    return `${paddedMonth}.${gregorianYear}`;
 };
 
 const isValidThaiDate = (date) => {
@@ -180,10 +189,10 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                     console.log('SELECT query results:', results);
 
                     if (results.length > 0) {
-                        
                         // ถ้าพบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
                         const updateSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ?';
-                        connection.query(updateSql, ['ชำระเงินเรียบร้อยแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                        console.log('Executing UPDATE query with:', ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
+                        connection.query(updateSql, ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
                             if (error) {
                                 console.error('Error executing UPDATE query:', error);
                                 return reject(error);
@@ -192,8 +201,17 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                             resolve(results);
                         });
                     } else {
-                        console.log('No matching records found for:', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth);
-                        resolve(null); // ไม่มีการอัปเดตถ้าไม่พบข้อมูลตรงกัน
+                        // ถ้าไม่พบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
+                        const updateSql = 'UPDATE bills SET status = ? WHERE customer_ca != ? AND bill_month != ?';
+                        console.log('Executing UPDATE query with:', ['ชำระเงินแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
+                        connection.query(updateSql, ['ชำระเงินแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                            if (error) {
+                                console.error('Error executing UPDATE query:', error);
+                                return reject(error);
+                            }
+                            console.log('UPDATE query results:', results);
+                            resolve(results);
+                        });
                     }
                 });
             });
@@ -220,6 +238,8 @@ app.post('/upload030', upload.single('file'), (req, res) => {
             });
     });
 });
+
+
 
 
 // ฟังก์ชันเพื่อ query ข้อมูล
