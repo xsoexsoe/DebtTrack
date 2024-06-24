@@ -160,10 +160,9 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                 let billMonth = row.บิลเดือน;
 
                 if (typeof billMonth === 'number') {
-                    // แปลงตัวเลขเป็นวันที่
                     const dateObj = convertExcelDateToJSDate(billMonth);
                     const day = dateObj.getUTCDate();
-                    const month = dateObj.getUTCMonth() + 1; // เดือนใน JavaScript เริ่มจาก 0
+                    const month = dateObj.getUTCMonth() + 1;
                     const year = dateObj.getUTCFullYear();
                     billMonth = `${day}/${month}/${year}`;
                     console.log(`Converted numeric bill month to date: ${billMonth}`);
@@ -180,39 +179,37 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                     return reject(new Error(`Invalid date format for row: ${JSON.stringify(row)}`));
                 }
 
-                const checkSql = 'SELECT * FROM bills WHERE customer_ca = ? AND bill_month = ?';
-                connection.query(checkSql, [row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                const updateToPaidSql = 'UPDATE bills SET status = ?';
+                connection.query(updateToPaidSql, ['ชำระเงินเรียบร้อยแล้ว'], (error, results) => {
                     if (error) {
-                        console.error('Error executing SELECT query:', error);
+                        console.error('Error executing UPDATE to paid query:', error);
                         return reject(error);
                     }
-                    console.log('SELECT query results:', results);
+                    console.log('UPDATE to paid query results:', results);
 
-                    if (results.length > 0) {
-                        // ถ้าพบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
-                        const updateSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ?';
-                        console.log('Executing UPDATE query with:', ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
-                        connection.query(updateSql, ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
-                            if (error) {
-                                console.error('Error executing UPDATE query:', error);
-                                return reject(error);
-                            }
-                            console.log('UPDATE query results:', results);
+                    const checkSql = 'SELECT * FROM bills WHERE customer_ca = ? AND bill_month = ?';
+                    connection.query(checkSql, [row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                        if (error) {
+                            console.error('Error executing SELECT query:', error);
+                            return reject(error);
+                        }
+                        console.log('SELECT query results:', results);
+
+                        if (results.length > 0) {
+                            const updateToUnpaidSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ?';
+                            console.log('Executing UPDATE to unpaid query with:', ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
+                            connection.query(updateToUnpaidSql, ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                                if (error) {
+                                    console.error('Error executing UPDATE to unpaid query:', error);
+                                    return reject(error);
+                                }
+                                console.log('UPDATE to unpaid query results:', results);
+                                resolve(results);
+                            });
+                        } else {
                             resolve(results);
-                        });
-                    } else {
-                        // ถ้าไม่พบข้อมูลตรงกัน ให้ทำการอัปเดตสถานะ
-                        const updateSql = 'UPDATE bills SET status = ? WHERE customer_ca != ? AND bill_month != ?';
-                        console.log('Executing UPDATE query with:', ['ชำระเงินแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
-                        connection.query(updateSql, ['ชำระเงินแล้ว', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
-                            if (error) {
-                                console.error('Error executing UPDATE query:', error);
-                                return reject(error);
-                            }
-                            console.log('UPDATE query results:', results);
-                            resolve(results);
-                        });
-                    }
+                        }
+                    });
                 });
             });
         });
@@ -238,8 +235,6 @@ app.post('/upload030', upload.single('file'), (req, res) => {
             });
     });
 });
-
-
 
 
 // ฟังก์ชันเพื่อ query ข้อมูล
