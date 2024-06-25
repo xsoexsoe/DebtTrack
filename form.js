@@ -114,7 +114,7 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 </td>
                 <td class="text-center align-middle">${daysBetween}</td>
                 <td class="text-end align-middle">${joinRow.money.toFixed(2) || '-'}</td>
-                <td class="text-center align-middle">-</td>
+                <td class="text-center align-middle">${joinRow.status || '-'}</td>
                 <td class="text-center align-middle date-system">${dateSystemFormatted}</td>
                 <td class="text-center align-middle date-employee"></td>
                 <td class="text-center align-middle date-deferment"></td>
@@ -457,4 +457,28 @@ document.getElementById('calculateButton').addEventListener('click', function ()
 // ปุ่มปริ้น
 document.getElementById('printButton').addEventListener('click', function () {
     window.print();
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชันเพื่อแสดง/ซ่อนฟิลด์วันที่ผ่อนผันตามสถานะของ Checkboxes
+    function toggleDateField(checkboxId, containerId) {
+        const checkbox = document.getElementById(checkboxId);
+        const container = document.getElementById(containerId);
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        });
+    }
+
+    // เรียกใช้ฟังก์ชัน toggleDateField สำหรับฟิลด์วันที่ผ่อนผัน
+    toggleDateField('enable_date_deferment', 'date_deferment_container');
+    toggleDateField('enable_date_deferment2', 'date_deferment2_container');
+
+    // เรียกใช้งาน event change เมื่อโหลดหน้า เพื่อให้สถานะเริ่มต้นถูกต้อง
+    document.getElementById('enable_date_deferment').dispatchEvent(new Event('change'));
+    document.getElementById('enable_date_deferment2').dispatchEvent(new Event('change'));
 });
