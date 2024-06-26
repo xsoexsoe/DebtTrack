@@ -120,7 +120,8 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 <td class="text-center align-middle date-deferment"></td>
                 <td class="text-center align-middle date-deferment2"></td>
                 <td class="text-center align-middle date-company"></td>
-                
+                <td class="text-center align-middle">-</td>
+                <td class="text-center align-middle">-</td>
             `;
 
             tableBody.appendChild(tr);
