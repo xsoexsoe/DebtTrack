@@ -17,6 +17,21 @@ app.use(cors());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// API เพื่อดึงข้อมูล id_command
+app.get('/api/id_commands', (req, res) => {
+    const sql = 'SELECT id_command FROM bills';
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching id_command:', err);
+            res.status(500).json({ message: 'Error fetching id_command' });
+            return;
+        }
+        
+        const idCommands = results.map(row => row.id_command);
+        res.json(idCommands);
+    });
+});
+
 // ตั้งค่าเส้นทางสำหรับการอัพโหลดไฟล์
 app.post('/upload121', upload.single('file'), (req, res) => {
     if (!req.file) {
@@ -27,7 +42,10 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
 
-    // ฟังก์ชันสำหรับการแปลงวันที่จาก พ.ศ. เป็น ค.ศ.
+    const orderNumber = req.body.orderNumber;
+    const year = req.body.year;
+    const id_command = `${orderNumber}/${year}`;
+
     const convertThaiToGregorian = (thaiDate) => {
         const [month, thaiYear] = thaiDate.split('.');
         const gregorianYear = parseInt(thaiYear, 10) - 543;
@@ -63,37 +81,80 @@ app.post('/upload121', upload.single('file'), (req, res) => {
                     });
                 }
 
-                const sql2 = 'INSERT INTO bills (money, tax, non_tax, bill_month, status, customer_ca, id_command) VALUES ?';
-                const values2 = newData.map(row => [
-                    row.จำนวนเงิน,
-                    row.ภาษี,
-                    row.เงินไม่รวมภาษี,
-                    convertThaiToGregorian(row.บิลเดือน), // แปลงวันที่จาก พ.ศ. เป็น ค.ศ.
-                    'ยังไม่ดำเนินการ',
-                    row.หมายเลขผู้ใช้ไฟฟ้า,
-                    row.คำสั่ง
-                ]);
+                const sql2Check = 'SELECT * FROM bills WHERE customer_ca = ? AND bill_month = ? AND id_command = ?';
+                const sql2Insert = 'INSERT INTO bills (money, tax, non_tax, bill_month, status, customer_ca, id_command) VALUES ?';
 
-                connection.query(sql2, [values2], (err, result2) => {
-                    if (err) {
-                        console.error('Error executing SQL query:', err);
-                        return connection.rollback(() => {
-                            res.status(500).json({ message: 'Error uploading data to another table.' });
+                const checkPromises = newData.map(row => {
+                    const billMonth = convertThaiToGregorian(row.บิลเดือน);
+                    return new Promise((resolve, reject) => {
+                        connection.query(sql2Check, [row.หมายเลขผู้ใช้ไฟฟ้า, billMonth, id_command], (err, results) => {
+                            if (err) {
+                                console.error('Error executing SQL query:', err);
+                                return reject(err);
+                            }
+
+                            if (results.length === 0) {
+                                resolve([
+                                    row.จำนวนเงิน,
+                                    row.ภาษี,
+                                    row.เงินไม่รวมภาษี,
+                                    billMonth,
+                                    'ยังไม่ดำเนินการ',
+                                    row.หมายเลขผู้ใช้ไฟฟ้า,
+                                    id_command
+                                ]);
+                            } else {
+                                resolve(undefined);
+                            }
                         });
-                    }
-
-                    connection.commit(err => {
-                        if (err) {
-                            console.error('Error committing transaction:', err);
-                            return connection.rollback(() => {
-                                res.status(500).json({ message: 'Error committing transaction.' });
-                            });
-                        }
-
-                        console.log('Data uploaded successfully to both tables:', result1, result2);
-                        res.json({ message: 'Data uploaded successfully to both tables.' });
                     });
                 });
+
+                Promise.all(checkPromises)
+                    .then(values2Insert => {
+                        values2Insert = values2Insert.filter(value => value !== undefined);
+
+                        if (values2Insert.length > 0) {
+                            connection.query(sql2Insert, [values2Insert], (err, result2) => {
+                                if (err) {
+                                    console.error('Error executing SQL query:', err);
+                                    return connection.rollback(() => {
+                                        res.status(500).json({ message: 'Error uploading data to bills table.' });
+                                    });
+                                }
+
+                                connection.commit(err => {
+                                    if (err) {
+                                        console.error('Error committing transaction:', err);
+                                        return connection.rollback(() => {
+                                            res.status(500).json({ message: 'Error committing transaction.' });
+                                        });
+                                    }
+
+                                    console.log('Data uploaded successfully to both tables:', result1, result2);
+                                    res.json({ message: 'Data uploaded successfully to both tables.' });
+                                });
+                            });
+                        } else {
+                            connection.commit(err => {
+                                if (err) {
+                                    console.error('Error committing transaction:', err);
+                                    return connection.rollback(() => {
+                                        res.status(500).json({ message: 'Error committing transaction.' });
+                                    });
+                                }
+
+                                console.log('Data uploaded successfully to customer table, no new bills data.');
+                                res.json({ message: 'Data uploaded successfully to customer table, no new bills data.', noNewBills: true });
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error processing data:', err);
+                        connection.rollback(() => {
+                            res.status(500).json({ message: 'Error processing data.' });
+                        });
+                    });
             });
         });
     });
@@ -146,7 +207,19 @@ app.post('/upload030', upload.single('file'), (req, res) => {
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
-    console.log('Data read from Excel:', data);
+    // console.log('Data read from Excel:', data);
+
+    // กำหนดตัวแปร orderNumber และ year จาก req.body
+    const orderNumber = req.body.orderNumber;
+    const year = req.body.year;
+
+    if (!orderNumber || !year) {
+        console.error('Order number or year not provided.');
+        return res.status(400).json({ message: 'Order number or year not provided.' });
+    }
+
+    console.log('Order Number:', orderNumber);
+    console.log('Year:', year);
 
     connection.beginTransaction(err => {
         if (err) {
@@ -158,6 +231,7 @@ app.post('/upload030', upload.single('file'), (req, res) => {
         const updatePromises = data.map(row => {
             return new Promise((resolve, reject) => {
                 let billMonth = row.บิลเดือน;
+                const id_command = `${orderNumber}/${year}`;
 
                 if (typeof billMonth === 'number') {
                     const dateObj = convertExcelDateToJSDate(billMonth);
@@ -179,8 +253,8 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                     return reject(new Error(`Invalid date format for row: ${JSON.stringify(row)}`));
                 }
 
-                const updateToPaidSql = 'UPDATE bills SET status = ?';
-                connection.query(updateToPaidSql, ['ชำระเงินเรียบร้อยแล้ว'], (error, results) => {
+                const updateToPaidSql = 'UPDATE bills SET status = ? WHERE id_command = ?';
+                connection.query(updateToPaidSql, ['ชำระเงินเรียบร้อยแล้ว', id_command], (error, results) => {
                     if (error) {
                         console.error('Error executing UPDATE to paid query:', error);
                         return reject(error);
@@ -194,11 +268,11 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                             return reject(error);
                         }
                         console.log('SELECT query results:', results);
-
+                        console.log('SELECT ', gregorianBillMonth);
                         if (results.length > 0) {
-                            const updateToUnpaidSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ?';
-                            console.log('Executing UPDATE to unpaid query with:', ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth]);
-                            connection.query(updateToUnpaidSql, ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth], (error, results) => {
+                            const updateToUnpaidSql = 'UPDATE bills SET status = ? WHERE customer_ca = ? AND bill_month = ? AND id_command = ?';
+                            console.log('Executing UPDATE to unpaid query with:', ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth, id_command]);
+                            connection.query(updateToUnpaidSql, ['ยังไม่ได้ชำระเงิน', row.หมายเลขผู้ใช้ไฟฟ้า, gregorianBillMonth, id_command], (error, results) => {
                                 if (error) {
                                     console.error('Error executing UPDATE to unpaid query:', error);
                                     return reject(error);

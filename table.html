@@ -33,8 +33,6 @@
                  <div class="sidebar-brand-icon">
                     <img src="assets/img/โลโก้.png"  width="46" height="44" alt="">
                  </div>
-                 <!-- <div class="sidebar-brand-text mx-3 text-capitalize custom-font" style="font-size: 21px;font-weight: bold;">DebtTrack</div> -->
-
              </a>
 
              <!-- เส้นแบ่ง -->
@@ -93,6 +91,22 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">รายละเอียดลูกหนี้</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="yearFilter" class="form-label">Filter by Year:</label>
+                                <select id="yearFilter" class="form-select">
+                                    <option value="">All</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="commandFilter" class="form-label">Filter by Command:</label>
+                                <select id="commandFilter" class="form-select">
+                                    <option value="">All</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
