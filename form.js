@@ -16,12 +16,6 @@ const portionAdjustments = {
     'C1': 8, 'C2': 9, 'C3': 10, 'C4': 11,
     'D1': 12, 'D2': 13, 'D3': 14, 'D4': 15
 };
-// ฟังก์ชันแปลงปีเป็น พ.ศ.
-function convertToBuddhistYear(date) {
-    const year = date.getFullYear();
-    const buddhistYear = year;
-    return new Date(date.setFullYear(buddhistYear));
-}
 
 
 // ฟังก์ชันคำนวณวันที่ก่อน
@@ -329,74 +323,69 @@ fetch('http://localhost:5500/holidays')
         console.error('Error fetching holidays:', error);
     });
 
-function initializeFlatpickr() {
-    const dateInputs = ['#date_system', '#date_employee', '#date_company', '#date_deferment', '#date_deferment2'];
-
-    dateInputs.forEach(id => {
-        const datepicker = flatpickr(id, {
-            dateFormat: "d-m-Y",
-            allowInput: true,
-            disable: [
-                function(date) {
-                    const dateStr = date.toISOString().split('T')[0];
-                    // ปิดการเลือกวันเสาร์และวันอาทิตย์ รวมถึงวันหยุด
-                    return (date.getDay() === 0 || date.getDay() === 6 || holidayDates.includes(dateStr));
+    function initializeFlatpickr() {
+        const dateInputs = ['#date_system', '#date_employee', '#date_company', '#date_deferment', '#date_deferment2'];
+    
+        dateInputs.forEach(id => {
+            const datepicker = flatpickr(id, {
+                dateFormat: "d-m-Y",
+                allowInput: true,
+                disable: [
+                    function(date) {
+                        const dateStr = date.toISOString().split('T')[0];
+                        return (date.getDay() === 0 || date.getDay() === 6 || holidayDates.includes(dateStr));
+                    }
+                ],
+                locale: {
+                    firstDayOfWeek: 1 // เริ่มต้นสัปดาห์ที่วันจันทร์
+                },
+                onDayCreate: function (dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj.toISOString().split('T')[0];
+                    if (holidayDescriptions[date]) {
+                        dayElem.setAttribute('title', holidayDescriptions[date]);
+                        dayElem.classList.add('holiday');
+                    }
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    instance.input.value = dateStr; // แสดงวันที่ในฟอร์แมต d-m-Y
+    
+                    switch (id) {
+                        case '#date_system':
+                            updateApprovalDates(selectedDates[0]);
+                            break;
+                        case '#date_employee':
+                            updateEmployeeDates(selectedDates[0]);
+                            break;
+                        case '#date_company':
+                            updateCompanyDates(selectedDates[0]);
+                            break;
+                        case '#date_deferment':
+                            updateDefermentDates(selectedDates[0]);
+                            break;
+                        case '#date_deferment2':
+                            updateDeferment2Dates(selectedDates[0]);
+                            break;
+                    }
                 }
-            ],
-            locale: {
-                firstDayOfWeek: 1 // เริ่มต้นสัปดาห์ที่วันจันทร์
-            },
-            onDayCreate: function (dObj, dStr, fp, dayElem) {
-                const date = dayElem.dateObj.toISOString().split('T')[0];
-                if (holidayDescriptions[date]) {
-                    dayElem.setAttribute('title', holidayDescriptions[date]);
-                    dayElem.classList.add('holiday');
-                }
-            },
-            onChange: function(selectedDates, dateStr, instance) {
-                // แปลงวันที่เป็น พ.ศ.
-                const buddhistDate = convertToBuddhistYear(new Date(selectedDates[0]));
-                const buddhistDateStr = flatpickr.formatDate(buddhistDate, "d.m.Y");
-
-                instance.input.value = buddhistDateStr; // แสดงวันที่ในฟอร์แมต พ.ศ.
-
-                switch (id) {
-                    case '#date_system':
-                        updateApprovalDates(selectedDates[0]);
-                        break;
-                    case '#date_employee':
-                        updateEmployeeDates(selectedDates[0]);
-                        break;
-                    case '#date_company':
-                        updateCompanyDates(selectedDates[0]);
-                        break;
-                    case '#date_deferment':
-                        updateDefermentDates(selectedDates[0]);
-                        break;
-                    case '#date_deferment2':
-                        updateDeferment2Dates(selectedDates[0]);
-                        break;
-                }
+            });
+    
+            const toggleButton = document.querySelector(`[data-toggle="${id.substring(1)}"]`);
+            const clearButton = document.querySelector(`[data-clear="${id.substring(1)}"]`);
+    
+            if (toggleButton) {
+                toggleButton.addEventListener('click', function() {
+                    datepicker.open();
+                });
+            }
+    
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    datepicker.clear();
+                });
             }
         });
-
-        const toggleButton = document.querySelector(`[data-toggle="${id.substring(1)}"]`);
-        const clearButton = document.querySelector(`[data-clear="${id.substring(1)}"]`);
-
-        if (toggleButton) {
-            toggleButton.addEventListener('click', function() {
-                datepicker.open();
-            });
-        }
-
-        if (clearButton) {
-            clearButton.addEventListener('click', function() {
-                datepicker.clear();
-            });
-        }
-    });
-}
-
+    }
+    
 // ดึง query parameters และเติมข้อมูลลงในฟอร์มเมื่อเอกสารโหลดเสร็จ
 document.addEventListener('DOMContentLoaded', (event) => {
     const params = getQueryParams();
@@ -424,34 +413,42 @@ function getDaysInMonth(date) {
     const month = date.getMonth() + 1;
     return new Date(year, month, 0).getDate();
 }
-
+// ฟังก์ชันแปลงรูปแบบวันที่จาก d-m-Y เป็น YYYY-MM-DD
+function convertToISODate(dateStr) {
+    const [day, month, year] = dateStr.split('-');
+    return `${month}-${day}-${year}`;
+}
 // ปุ่มคำนวณ
 document.getElementById('calculateButton').addEventListener('click', function () {
-    const dateSystem = new Date(document.getElementById('date_system').value);
-    const dateEmployee = new Date(document.getElementById('date_employee').value);
-    const dateCompany = new Date(document.getElementById('date_company').value);
+    const dateSystem = new Date(convertToISODate(document.getElementById('date_system').value));
+    const dateEmployee = new Date(convertToISODate(document.getElementById('date_employee').value));
+    const dateCompany = new Date(convertToISODate(document.getElementById('date_company').value));
     const dateDeferment = new Date(document.getElementById('date_deferment').value);
     const dateDeferment2 = new Date(document.getElementById('date_deferment2').value);
     const totalMoney = parseFloat(document.getElementById('total_money').value);
-
+    console.log(dateSystem);
+    console.log(dateEmployee);
+    console.log(dateCompany);
     // คำนวณจำนวนวันในเดือนที่ระบุ
     const daysInMonth = getDaysInMonth(dateSystem);
-
+    console.log(daysInMonth);
     // อัตราค่าใช้จ่ายต่อวัน
     const dailyRate = totalMoney / daysInMonth;
-
+    console.log(dailyRate);
     // คำนวณจำนวนวันที่พนักงานล่าช้า
     const daysLateEmployee = calculateBusinessDays(dateSystem, dateEmployee) - 1; // ไม่รวมวันเริ่มต้น
-
+    console.log(daysLateEmployee);
     // คำนวณจำนวนเงินที่พนักงานต้องรับผิดชอบ
     const responsibilityAmountEmployee = daysLateEmployee * dailyRate;
-
+    console.log(responsibilityAmountEmployee);
     // คำนวณจำนวนวันที่ผู้รับจ้างล่าช้าจากวันที่พนักงานสั่งงาน
     const daysLateContractor = calculateBusinessDays(dateEmployee, dateCompany) - 8; // ไม่รวมวันเริ่มต้นและระยะเวลา 7 วัน
-
+    console.log(dateEmployee);
+    console.log(dateCompany);
+    console.log(daysLateContractor);
     // คำนวณจำนวนเงินที่ผู้รับจ้างต้องรับผิดชอบ
     const responsibilityAmountContractor = daysLateContractor * dailyRate;
-
+    console.log(responsibilityAmountContractor);
     alert(`พนักงานต้องรับผิดชอบเป็นจำนวน ${daysLateEmployee} วัน และเป็นเงิน ${responsibilityAmountEmployee.toFixed(2)} บาท\nผู้รับจ้างต้องรับผิดชอบเป็นจำนวน ${daysLateContractor} วัน และเป็นเงิน ${responsibilityAmountContractor.toFixed(2)} บาท`);
 });
 
