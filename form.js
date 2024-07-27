@@ -116,13 +116,21 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
                 <td class="text-center align-middle date-company"></td>
                 <td class="text-center align-middle">-</td>
                 <td class="text-center align-middle">-</td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
+                <td class="text-center align-middle"></td>
             `;
 
             tableBody.appendChild(tr);
 
             // ตั้งค่า flatpickr
             flatpickr(`input[data-id="${joinRow.id}"][data-type="before"]`, {
-                dateFormat: "d.m.Y",
+                dateFormat: "d-m-Y",
                 onChange: function(selectedDates, dateStr, instance) {
                     const afterInput = document.querySelector(`input[data-id="${joinRow.id}"][data-type="after"]`);
                     const beforeDate = new Date(selectedDates[0]);
@@ -134,7 +142,7 @@ function populateTableWithFilteredData(sumMoneyResults, countResults, joinResult
             });
 
             flatpickr(`input[data-id="${joinRow.id}"][data-type="after"]`, {
-                dateFormat: "d.m.Y",
+                dateFormat: "d-m-Y",
                 onChange: function(selectedDates, dateStr, instance) {
                     const beforeInput = document.querySelector(`input[data-id="${joinRow.id}"][data-type="before"]`);
                     const afterDate = new Date(selectedDates[0]);
@@ -392,6 +400,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     populateForm(params);
 });
 
+
+
 // ฟังก์ชันคำนวณจำนวนวันที่ไม่รวมวันหยุดเสาร์-อาทิตย์
 function calculateBusinessDays(startDate, endDate) {
     let count = 0;
@@ -418,39 +428,224 @@ function convertToISODate(dateStr) {
     const [day, month, year] = dateStr.split('-');
     return `${month}-${day}-${year}`;
 }
+
+
+// // ปุ่มคำนวณ
+// document.getElementById('calculateButton').addEventListener('click', function () {
+//     const dateSystem = new Date(convertToISODate(document.getElementById('date_system').value));
+//     const dateEmployee = new Date(convertToISODate(document.getElementById('date_employee').value));
+//     const dateCompany = new Date(convertToISODate(document.getElementById('date_company').value));
+//     const dateDeferment = new Date(document.getElementById('date_deferment').value);
+//     const dateDeferment2 = new Date(document.getElementById('date_deferment2').value);
+//     const totalMoney = parseFloat(document.getElementById('total_money').value);
+//     console.log(dateSystem);
+//     console.log(dateEmployee);
+//     console.log(dateCompany);
+//     // คำนวณจำนวนวันในเดือนที่ระบุ
+//     const daysInMonth = getDaysInMonth(dateSystem);
+//     console.log(daysInMonth);
+//     // อัตราค่าใช้จ่ายต่อวัน
+//     const dailyRate = totalMoney / daysInMonth;
+//     console.log(dailyRate);
+//     // คำนวณจำนวนวันที่พนักงานล่าช้า
+//     const daysLateEmployee = calculateBusinessDays(dateSystem, dateEmployee) - 1; // ไม่รวมวันเริ่มต้น
+//     console.log(daysLateEmployee);
+//     // คำนวณจำนวนเงินที่พนักงานต้องรับผิดชอบ
+//     const responsibilityAmountEmployee = daysLateEmployee * dailyRate;
+//     console.log(responsibilityAmountEmployee);
+//     // คำนวณจำนวนวันที่ผู้รับจ้างล่าช้าจากวันที่พนักงานสั่งงาน
+//     const daysLateContractor = calculateBusinessDays(dateEmployee, dateCompany) - 8; // ไม่รวมวันเริ่มต้นและระยะเวลา 7 วัน
+//     console.log(dateEmployee);
+//     console.log(dateCompany);
+//     console.log(daysLateContractor);
+//     // คำนวณจำนวนเงินที่ผู้รับจ้างต้องรับผิดชอบ
+//     const responsibilityAmountContractor = daysLateContractor * dailyRate;
+//     console.log(responsibilityAmountContractor);
+//     alert(`พนักงานต้องรับผิดชอบเป็นจำนวน ${daysLateEmployee} วัน และเป็นเงิน ${responsibilityAmountEmployee.toFixed(2)} บาท\nผู้รับจ้างต้องรับผิดชอบเป็นจำนวน ${daysLateContractor} วัน และเป็นเงิน ${responsibilityAmountContractor.toFixed(2)} บาท`);
+// });
+
+
+
+// ฟังก์ชันคำนวณความรับผิดชอบ
+function calculateResponsibility() {
+    // ดึงค่าและแปลงวันที่จาก input fields
+    const approvalDate = new Date(document.getElementById('date_system').value.split('-').reverse().join('-'));
+    const accountantOrderDate = new Date(document.getElementById('date_employee').value.split('-').reverse().join('-'));
+    const contractorActionDate = new Date(document.getElementById('date_company').value.split('-').reverse().join('-'));
+    const postpone1DateInput = document.getElementById('date_deferment').value;
+    const postpone2DateInput = document.getElementById('date_deferment2').value;
+
+    const postpone1Date = postpone1DateInput ? new Date(postpone1DateInput.split('-').reverse().join('-')) : null;
+    const postpone2Date = postpone2DateInput ? new Date(postpone2DateInput.split('-').reverse().join('-')) : null;
+
+    // แสดงวันที่ที่ได้รับจาก input fields ในคอนโซล
+    console.log(`calculateResponsibility: approvalDate=${approvalDate}, accountantOrderDate=${accountantOrderDate}, contractorActionDate=${contractorActionDate}, postpone1Date=${postpone1Date}, postpone2Date=${postpone2Date}`);
+
+    
+    // ดึงข้อมูลบิลจากตาราง
+    const bills = getTableData();
+    const responsibilityData = [];
+
+    // ฟังก์ชันช่วยเหลือในการคำนวณจำนวนวันระหว่างสองวันที่
+    const calculateDaysBetween = (startDate, endDate) => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        return Math.round((endDate - startDate) / oneDay);
+    }
+
+    // ฟังก์ชันเพิ่มวันที่
+    const addDays = (date, days) => {
+        let result = new Date(date);
+        result.setDate(result.getDate() - days);
+        return result;
+    }
+
+    console.log(calculateDaysBetween(approvalDate,accountantOrderDate ));
+    console.log(calculateDaysBetween(approvalDate, addDays(accountantOrderDate, 22)));
+    console.log(calculateDaysBetween(accountantOrderDate, addDays(contractorActionDate, 7)));
+    console.log(calculateDaysBetween(accountantOrderDate, contractorActionDate));
+
+    // วนลูปผ่านแต่ละบิล
+    bills.forEach((bill) => {
+        if (bill.startDate && bill.endDate) { // ตรวจสอบว่ามี startDate และ endDate
+            let responsibilityText = '';
+            let currentStartDate = accountantOrderDate; // วันที่เริ่มต้นปัจจุบัน
+            let responsibilityPeriods = []; // เก็บช่วงความรับผิดชอบ
+
+            console.log(`Processing bill for month ${bill.month}: startDate=${bill.startDate}, endDate=${bill.endDate}, amount=${bill.amount}`);
+
+            // ฟังก์ชันช่วยในการตรวจสอบและคำนวณวันที่
+            const addResponsibilityPeriod = (startDate, endDate, responsibleParty) => {
+                if (endDate > startDate) {
+                    const days = calculateDaysBetween(startDate, endDate);
+                    responsibilityPeriods.push({ responsibleParty, days });
+                    console.log(`Added ${days} days of responsibility for ${responsibleParty} from ${startDate.toDateString()} to ${endDate.toDateString()}`);
+                }
+            }
+
+            // ตรวจสอบและจัดการช่วงความรับผิดชอบตามลำดับวันที่
+            const accountantLate = calculateDaysBetween(approvalDate, accountantOrderDate) > 22;
+            const deferment1 = calculateDaysBetween(currentStartDate, postpone1Date) > 7 && postpone1Date != null;
+            const deferment2 = calculateDaysBetween(postpone1Date, postpone1Date) > 2 && postpone2Date != null; // เงื่อนไขผ่อนผัน 2 ต้องมีผ่อนผัน 1
+            const contractorLate = calculateDaysBetween(currentStartDate, contractorActionDate) > 7;
+            const pea = calculateDaysBetween(approvalDate, bill.endDate) < 0;
+            console.log(`accountantLate=${accountantLate}, deferment1=${deferment1}, deferment2=${deferment2}, contractorLate=${contractorLate}, pea=${pea}`);
+            
+            // ถ้าวันที่ติดลบ ให้แสดงความรับผิดชอบของการไฟฟ้า
+            if (pea) {
+                addResponsibilityPeriod(bill.startDate, bill.endDate, 'Electricity Authority');
+            }
+            if (accountantLate) {
+                addResponsibilityPeriod(approvalDate, accountantOrderDate, 'Accountant');
+                currentStartDate = addDays(accountantOrderDate, 22);
+                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after accounting late period`);
+            }
+
+            if (deferment1 && currentStartDate < postpone1Date) {
+                const postpone1EndDate = addDays(currentStartDate, 7); // กำหนด 2 วัน
+                addResponsibilityPeriod(currentStartDate, postpone1EndDate, 'Deferment 1');
+                console.log(`Deferment 1 period: ${calculateDaysBetween(currentStartDate, postpone1EndDate)} days`);
+                currentStartDate = postpone1EndDate;
+                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after deferment 1 period`);
+            }
+
+            if (deferment2 && currentStartDate < postpone2Date) {
+                const postpone2EndDate = addDays(currentStartDate, 2); // กำหนด 2 วันจากผ่อนผัน 1
+                addResponsibilityPeriod(currentStartDate, postpone2EndDate, 'Deferment 2');
+                console.log(`Deferment 2 period: ${calculateDaysBetween(currentStartDate, postpone2EndDate)} days`);
+                currentStartDate = postpone2EndDate;
+                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after deferment 2 period`);
+            }
+
+            if (contractorLate) {
+                const contractorEndDate = addDays(currentStartDate, 7); // กำหนด 7 วันจากวันที่พนักงานสั่งงาน หรือจากวันที่ผ่อนผัน
+                addResponsibilityPeriod(currentStartDate, contractorEndDate, 'Contractor');
+                console.log(`Contractor period: ${calculateDaysBetween(currentStartDate, contractorEndDate)} days`);
+                currentStartDate = contractorEndDate;
+                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
+            }
+
+            // ตรวจสอบและจัดการช่วงเวลาที่เกิน endDate หรือไม่มีบุคคลอื่นรับผิดชอบ
+            else {
+                addResponsibilityPeriod(currentStartDate, bill.endDate, 'Electricity Authority');
+                console.log(`Electricity Authority period: ${calculateDaysBetween(currentStartDate, bill.endDate)} days`);
+                console.log(`Added remaining period of responsibility for Electricity Authority from ${currentStartDate.toDateString()} to ${bill.endDate.toDateString()}`);
+            }
+
+            // คำนวณจำนวนเงินที่ต้องรับผิดชอบ
+            const dailyRate = bill.amount / calculateDaysBetween(bill.startDate, bill.endDate);
+            let totalResponsibilityText = '';
+
+            // สรุปความรับผิดชอบในแต่ละช่วงเวลา
+            responsibilityPeriods.forEach(period => {
+                const amount = dailyRate * period.days;
+                totalResponsibilityText += `${period.responsibleParty}: ${amount.toFixed(2)} บาท (${period.days} วัน) `;
+            });
+
+            responsibilityText = totalResponsibilityText.trim();
+
+            // อัปเดตข้อมูลความรับผิดชอบ
+            responsibilityData.push({ month: bill.month, responsibilityText });
+            console.log(`calculateResponsibility: processed bill ${bill.month} - ${responsibilityText}`);
+        } else {
+            console.error(`calculateResponsibility: startDate or endDate is null for bill ${bill.month}`);
+        }
+    });
+
+    // แสดงข้อมูลความรับผิดชอบทั้งหมดในคอนโซล
+    console.log('Responsibility data:', responsibilityData);
+    // อัปเดตตารางด้วยข้อมูลความรับผิดชอบ
+    updateTableWithResponsibilityData(responsibilityData);
+}
+
+// ฟังก์ชันอัปเดตตารางด้วยข้อมูลความรับผิดชอบ
+function updateTableWithResponsibilityData(responsibilityData) {
+    const rows = document.querySelectorAll('#dataTable tbody tr');
+
+    responsibilityData.forEach(data => {
+        rows.forEach(row => {
+            const monthCell = row.querySelector('td:nth-child(1)'); // สมมติว่าเดือนอยู่ในคอลัมน์ที่ 1
+            if (monthCell && monthCell.textContent.trim() === data.month) {
+                const responsibilityCell = row.querySelector('td:nth-child(14)'); // คอลัมน์ที่ 14
+                if (responsibilityCell) {
+                    responsibilityCell.textContent = data.responsibilityText;
+                    console.log(`updateTableWithResponsibilityData: updated row for month ${data.month} with responsibilities ${data.responsibilityText}`);
+                }
+            }
+        });
+    });
+}
+
 // ปุ่มคำนวณ
-document.getElementById('calculateButton').addEventListener('click', function () {
-    const dateSystem = new Date(convertToISODate(document.getElementById('date_system').value));
-    const dateEmployee = new Date(convertToISODate(document.getElementById('date_employee').value));
-    const dateCompany = new Date(convertToISODate(document.getElementById('date_company').value));
-    const dateDeferment = new Date(document.getElementById('date_deferment').value);
-    const dateDeferment2 = new Date(document.getElementById('date_deferment2').value);
-    const totalMoney = parseFloat(document.getElementById('total_money').value);
-    console.log(dateSystem);
-    console.log(dateEmployee);
-    console.log(dateCompany);
-    // คำนวณจำนวนวันในเดือนที่ระบุ
-    const daysInMonth = getDaysInMonth(dateSystem);
-    console.log(daysInMonth);
-    // อัตราค่าใช้จ่ายต่อวัน
-    const dailyRate = totalMoney / daysInMonth;
-    console.log(dailyRate);
-    // คำนวณจำนวนวันที่พนักงานล่าช้า
-    const daysLateEmployee = calculateBusinessDays(dateSystem, dateEmployee) - 1; // ไม่รวมวันเริ่มต้น
-    console.log(daysLateEmployee);
-    // คำนวณจำนวนเงินที่พนักงานต้องรับผิดชอบ
-    const responsibilityAmountEmployee = daysLateEmployee * dailyRate;
-    console.log(responsibilityAmountEmployee);
-    // คำนวณจำนวนวันที่ผู้รับจ้างล่าช้าจากวันที่พนักงานสั่งงาน
-    const daysLateContractor = calculateBusinessDays(dateEmployee, dateCompany) - 8; // ไม่รวมวันเริ่มต้นและระยะเวลา 7 วัน
-    console.log(dateEmployee);
-    console.log(dateCompany);
-    console.log(daysLateContractor);
-    // คำนวณจำนวนเงินที่ผู้รับจ้างต้องรับผิดชอบ
-    const responsibilityAmountContractor = daysLateContractor * dailyRate;
-    console.log(responsibilityAmountContractor);
-    alert(`พนักงานต้องรับผิดชอบเป็นจำนวน ${daysLateEmployee} วัน และเป็นเงิน ${responsibilityAmountEmployee.toFixed(2)} บาท\nผู้รับจ้างต้องรับผิดชอบเป็นจำนวน ${daysLateContractor} วัน และเป็นเงิน ${responsibilityAmountContractor.toFixed(2)} บาท`);
-});
+document.getElementById('calculateButton').addEventListener('click', calculateResponsibility);
+
+// ฟังก์ชันดึงข้อมูลจากตาราง
+function getTableData() {
+    const tableRows = document.querySelectorAll('#tableform tr');
+    const bills = [];
+
+    tableRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 6) {
+            const startDateInput = cells[2].querySelector('input');
+            const endDateInput = cells[3].querySelector('input');
+            const bill = {
+                month: cells[0].textContent.trim(),
+                startDate: startDateInput ? new Date(startDateInput.value.trim().split('-').reverse().join('-')) : null,
+                endDate: endDateInput ? new Date(endDateInput.value.trim().split('-').reverse().join('-')) : null,
+                amount: parseFloat(cells[5].textContent.trim().replace(/,/g, ''))
+            };
+            bills.push(bill);
+            console.log(`getTableData: extracted bill ${JSON.stringify(bill)}`);
+        } else {
+            console.error(`getTableData: row has insufficient cells ${row.innerHTML}`);
+        }
+    });
+
+    return bills;
+}
+
+
+
 
 // ปุ่มปริ้น
 document.getElementById('printButton').addEventListener('click', function () {
