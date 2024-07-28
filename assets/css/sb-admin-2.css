@@ -10041,7 +10041,9 @@ a:focus {
 .text-lg {
   font-size: 1.2rem;
 }
-
+.text-end {
+  text-align: right !important;
+}
 .text-gray-100 {
   color: #f8f9fc !important;
 }

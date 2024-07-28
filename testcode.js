@@ -454,7 +454,7 @@ const calculateBusinessDaysBetween = (startDate, endDate, holidays) => {
         if (dayOfWeek !== 0 && dayOfWeek !== 6 && !holidays.includes(formattedDate)) { // ไม่ใช่วันเสาร์หรืออาทิตย์และไม่ใช่วันหยุด
             count++;
         }
-        currentDate.setDate(currentDate.getDate()+1);
+        currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return count;
@@ -464,7 +464,7 @@ const calculateBusinessDaysBetween = (startDate, endDate, holidays) => {
 const addBusinessDays = (startDate, days, holidays) => {
     let currentDate = new Date(startDate);
     let addedDays = 0;
-    currentDate.setDate(currentDate.getDate() +1);
+
     while (addedDays < days) {
         currentDate.setDate(currentDate.getDate() + 1);
         const dayOfWeek = currentDate.getDay();
@@ -481,6 +481,7 @@ const addBusinessDays = (startDate, days, holidays) => {
 async function calculateResponsibility() {
     const approvalDate = new Date(document.getElementById('date_system').value.split('-').reverse().join('-'));
     const accountantOrderDate = new Date(document.getElementById('date_employee').value.split('-').reverse().join('-'));
+    
     const contractorActionDate = new Date(document.getElementById('date_company').value.split('-').reverse().join('-'));
     const postpone1DateInput = document.getElementById('date_deferment').value;
     const postpone2DateInput = document.getElementById('date_deferment2').value;
@@ -515,7 +516,7 @@ async function calculateResponsibility() {
 
     let responsibilityData = {};
 
-    bills.forEach((bill) => {
+    bills.forEach((bill, billIndex) => {
         if (bill.startDate && bill.endDate) {
             let responsibilityPeriods = {};
 
@@ -534,6 +535,7 @@ async function calculateResponsibility() {
             }
 
             const totalDays = calculateDaysBetween(bill.startDate, bill.endDate);
+            
             console.log(totalDays);
             const accountantLate = calculateBusinessDaysBetween(approvalDate, accountantOrderDate, holidays) > 22;
             if (!(accountantLate)) {
@@ -552,22 +554,11 @@ async function calculateResponsibility() {
             console.log(`accountantLate=${accountantLate}, deferment1=${deferment1}, deferment2=${deferment2}, contractorLate=${contractorLate}, pea=${pea}`);
 
             let totalResponsibilityDays = 0;
-            
-            console.log()
-            if (accountantLate && accountantOrderDate >= bill.endDate && approvalDate <= bill.startDate) {
-                addResponsibilityPeriod(currentStartDate, bill.endDate, 'Accountant');
-                totalResponsibilityDays += calculateDaysBetween(currentStartDate, bill.endDate);
-                console.log(totalResponsibilityDays);
+
+            if (accountantLate && accountantOrderDate >= bill.startDate && accountantOrderDate <= bill.endDate) {
+                addResponsibilityPeriod(initialStartDate, accountantOrderDate, 'Accountant');
+                totalResponsibilityDays += calculateDaysBetween(initialStartDate, accountantOrderDate);
                 currentStartDate = accountantOrderDate;
-                console.log(`accountantLate period: ${calculateDaysBetween(currentStartDate, bill.endDate)} days`);
-                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after accounting late period`);
-            }
-            if (accountantLate && accountantOrderDate >= bill.startDate && accountantOrderDate <= bill.endDate && approvalDate <= bill.startDate) {
-                addResponsibilityPeriod(bill.startDate , accountantOrderDate, 'Accountant');
-                totalResponsibilityDays += calculateDaysBetween(bill.startDate , accountantOrderDate,);
-                console.log(totalResponsibilityDays);
-                currentStartDate = accountantOrderDate;
-                console.log(`accountantLate period: ${calculateDaysBetween(bill.startDate , accountantOrderDate,)} days`);
                 console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after accounting late period`);
             }
 
@@ -589,69 +580,49 @@ async function calculateResponsibility() {
                 console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after deferment 2 period`);
             }
 
-            if (contractorLate){
-                    if (contractorLate && addBusinessDays(currentStartDate, 7, holidays) <= bill.startDate && contractorActionDate < bill.endDate) {
-                        const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
-                        addResponsibilityPeriod(bill.startDate, contractorActionDate, 'Contractor');
-                        totalResponsibilityDays += calculateDaysBetween(bill.startDate, contractorActionDate);
-                        console.log(`Contractor period: ${calculateDaysBetween(bill.startDate, contractorActionDate)} days`);
-                        
-                        console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
-                    }
-                    console.log(addBusinessDays(currentStartDate, 7, holidays));
-                    console.log(approvalDate);
-                    if(contractorLate && addBusinessDays(currentStartDate, 7, holidays) >= bill.startDate && contractorActionDate < bill.endDate && approvalDate <= bill.startDate){
-                        const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
-                        console.log(contractorStartDate);
-                        addResponsibilityPeriod(contractorStartDate, contractorActionDate, 'Contractor');
-                        totalResponsibilityDays += calculateDaysBetween(contractorStartDate, contractorActionDate);
-                        console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, contractorActionDate)} days`);
-                        
-                        console.log(`Updated currentStartDate to ${contractorStartDate.toDateString()} after contractor period`);
-                    }
-                    if(contractorLate && addBusinessDays(currentStartDate, 7, holidays) >= bill.startDate && contractorActionDate >= bill.endDate && approvalDate <= bill.startDate && addBusinessDays(currentStartDate, 7, holidays)<= bill.endDate){
-                        const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
-                        addResponsibilityPeriod(contractorStartDate, bill.endDate, 'Contractor');
-                        totalResponsibilityDays += calculateDaysBetween(contractorStartDate, bill.endDate);
-                        console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, bill.endDate)} days`);
-                        console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
-                    }
-                    // if(contractorLate && addBusinessDays(currentStartDate, 7, holidays) >= bill.startDate && contractorActionDate >= bill.endDate && approvalDate <= bill.startDate && accountantLate ){
-                    //     const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
-                    //     addResponsibilityPeriod(contractorStartDate, bill.endDate, 'Contractor');
-                    //     totalResponsibilityDays += calculateDaysBetween(contractorStartDate, bill.endDate);
-                    //     console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, bill.endDate)} days`);
-                    //     console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
-                    // }
-                    if(contractorLate && addBusinessDays(currentStartDate, 7, holidays) <= bill.startDate && contractorActionDate >= bill.endDate){
-                        const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
-                        addResponsibilityPeriod(bill.startDate, bill.endDate, 'Contractor');
-                        totalResponsibilityDays += calculateDaysBetween(bill.startDate, bill.endDate);
-                        console.log(`Contractor period: ${calculateDaysBetween(bill.startDate, bill.endDate)} days`);
-                        
-                        console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
-                    }
-                    
-                    // if (contractorLate && contractorActionDate <= bill.endDate) {
-                    //     const contractorStartDate = addDays(currentStartDate, 7);
-                    //     addResponsibilityPeriod(bill.startDate, contractorActionDate, 'Contractor');
-                    //     totalResponsibilityDays += calculateDaysBetween(bill.startDate, contractorActionDate);
-                    //     console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, contractorActionDate)} days`);
-                    //     currentStartDate = contractorActionDate;
-                    //     console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
-                    // }
-                    
-            }   
+            if(contractorLate) {
+                const contractorStartDate = addDays(currentStartDate, 7);
+                if (addDays(currentStartDate, 7) <= bill.startDate && contractorActionDate <= bill.endDate) {
+                    const contractorStartDate = addDays(currentStartDate, 7);
+                    addResponsibilityPeriod(contractorStartDate, bill.endDate, 'Contractor');
+                    totalResponsibilityDays += calculateDaysBetween(contractorStartDate, contractorActionDate);
+                    console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, contractorActionDate)} days`);
+                    currentStartDate = contractorActionDate;
+                    console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
+                }
+                if (addDays(currentStartDate, 7) >= bill.startDate && contractorActionDate <= bill.endDate) {
+                const contractorStartDate = addDays(currentStartDate, 7);
+                addResponsibilityPeriod(contractorStartDate, contractorActionDate, 'Contractor');
+                totalResponsibilityDays += calculateDaysBetween(contractorStartDate, contractorActionDate);
+                console.log(`Contractor period: ${calculateDaysBetween(contractorStartDate, contractorActionDate)} days`);
+                currentStartDate = contractorActionDate;
+                console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
+                } 
+            
+            // else{
+            //     const nextMonthBill = bills[billIndex + 1];
+            //         if (nextMonthBill) {
+            //             const remainingDays = calculateDaysBetween(contractorStartDate, nextMonthBill.startDate);
+            //             addResponsibilityPeriod(contractorStartDate, nextMonthBill.startDate, 'Contractor');
+            //             totalResponsibilityDays += remainingDays;
+            //             console.log(`Added ${remainingDays} days of contractor responsibility to next month`);
+            //         }
+            // }
+        }
+        console.log(totalResponsibilityDays);
             const electricityAuthorityDays = totalDays - totalResponsibilityDays;
-            console.log(electricityAuthorityDays)
+            console.log(electricityAuthorityDays);
             if (electricityAuthorityDays > 0) {
-                const days = electricityAuthorityDays;
+                const days = Math.min(electricityAuthorityDays, totalDays);
                     if (!responsibilityPeriods['Electricity Authority']) {
                         responsibilityPeriods['Electricity Authority'] = { days: 0, amount: 0 };
                     }
                     responsibilityPeriods['Electricity Authority'].days += days;
                     responsibilityPeriods['Electricity Authority'].amount += (days * (bill.amount / calculateDaysBetween(bill.startDate, bill.endDate)));
-                    console.log(`Added ${days} days of responsibility for Electricity Authority from ${days} days`);
+                    console.log(`Added ${days} days of responsibility `);
+                
+                console.log(`Electricity Authority period: ${electricityAuthorityDays} days`);
+                console.log(`Added remaining period of responsibility for Electricity Authority from ${currentStartDate.toDateString()} to ${bill.endDate.toDateString()}`);
             }
 
             responsibilityData[bill.month] = {
@@ -661,7 +632,6 @@ async function calculateResponsibility() {
                 Contractor: responsibilityPeriods['Contractor'] || { days: 0, amount: 0 },
                 ElectricityAuthority: responsibilityPeriods['Electricity Authority'] || { days: electricityAuthorityDays, amount: (electricityAuthorityDays * (bill.amount / totalDays)) },
             };
-            console.log( responsibilityData[bill.month]);
         } else {
             console.error(`calculateResponsibility: startDate or endDate is null for bill ${bill.month}`);
         }
@@ -669,6 +639,7 @@ async function calculateResponsibility() {
 
     updateTable(responsibilityData);
 }
+
 // ฟังก์ชันอัปเดตตารางด้วยข้อมูลความรับผิดชอบสำหรับบิลแต่ละเดือน
 function updateTable(responsibilityData) {
     const rows = document.querySelectorAll('#dataTable tbody tr');
