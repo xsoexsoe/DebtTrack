@@ -1,72 +1,72 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ฟังก์ชันจัดรูปแบบวันที่ให้แสดงเฉพาะวันที่
+function formatDate(date) {
+    if (!date) return '';
+    const buddhistYear = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${day}-${month}-${buddhistYear}`;
+}
+
+// ดึงข้อมูลวันหยุดพร้อมรายละเอียด
+let holidayDates = [];
+let holidayDescriptions = {};
+
+fetch('http://localhost:5500/holidays')
+    .then(response => response.json())
+    .then(holidays => {
+        holidayDates = holidays.map(holiday => holiday.date.split('T')[0]); // แปลงรูปแบบวันที่ให้เป็น YYYY-MM-DD
+        holidays.forEach(holiday => {
+            holidayDescriptions[holiday.date.split('T')[0]] = holiday.description;
+        });
+
+        // Initialize flatpickr หลังจากดึงข้อมูลวันหยุดเรียบร้อยแล้ว
+        initializeFlatpickr();
+    })
+    .catch(error => {
+        console.error('Error fetching holidays:', error);
+    });
+
+function initializeFlatpickr() {
+        const dateInputs = ['#date_holiday'];
+    
+        dateInputs.forEach(id => {
+            const datepicker = flatpickr(id, {
+                dateFormat: "d-m-Y",
+                allowInput: true,
+                disable: [
+                    function(date) {
+                        const dateStr = date.toISOString().split('T')[0];
+                        return (date.getDay() === 0 || date.getDay() === 6 || holidayDates.includes(dateStr));
+                    }
+                ],
+                locale: {
+                    firstDayOfWeek: 1 // เริ่มต้นสัปดาห์ที่วันจันทร์
+                },
+                onDayCreate: function (dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj.toISOString().split('T')[0];
+                    if (holidayDescriptions[date]) {
+                        dayElem.setAttribute('title', holidayDescriptions[date]);
+                        dayElem.classList.add('holiday');
+                    }
+                },
+            });
+    
+            const toggleButton = document.querySelector(`[data-toggle="${id.substring(1)}"]`);
+            const clearButton = document.querySelector(`[data-clear="${id.substring(1)}"]`);
+    
+            if (toggleButton) {
+                toggleButton.addEventListener('click', function() {
+                    datepicker.open();
+                });
+            }
+    
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    datepicker.clear();
+                });
+            }
+        });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const holidayForm = document.querySelector('.user');
@@ -124,6 +124,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateHoliday(id, date, description) {
+        console.log('Update Holiday ID:', id);
+        console.log('Date:', date);
+        console.log('Description:', description);
+
         fetch(`http://localhost:5500/update_holiday/${id}`, {
             method: 'PUT',
             headers: {
@@ -180,8 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.deleteHoliday = function(id, event) {
-        event.preventDefault();
-        console.log('Deleting Holiday ID:', id);
+    
+        console.log('Deleting Holiday ID:', id); // ตรวจสอบว่า id ถูกส่งมาถูกต้อง
         fetch(`http://localhost:5500/delete_holiday/${id}`, {
             method: 'DELETE'
         })
@@ -207,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        return `${day}-${month}-${year}`;
     }
 
     function formatDateForDisplay(date) {

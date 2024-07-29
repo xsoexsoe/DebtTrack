@@ -430,7 +430,6 @@ function convertToISODate(dateStr) {
 
 
 
-
 // ฟังก์ชันดึงข้อมูลวันหยุดจากเซิร์ฟเวอร์
 async function fetchHolidays() {
     try {
@@ -593,7 +592,9 @@ async function calculateResponsibility() {
                     if (contractorLate && addBusinessDays(currentStartDate, 7, holidays) <= bill.startDate && contractorActionDate < bill.endDate) {
                         const contractorStartDate = addBusinessDays(currentStartDate, 7, holidays);
                         addResponsibilityPeriod(bill.startDate, contractorActionDate, 'Contractor');
+                        console.log(totalResponsibilityDays);
                         totalResponsibilityDays += calculateDaysBetween(bill.startDate, contractorActionDate);
+                       
                         console.log(`Contractor period: ${calculateDaysBetween(bill.startDate, contractorActionDate)} days`);
                         
                         console.log(`Updated currentStartDate to ${currentStartDate.toDateString()} after contractor period`);
@@ -642,6 +643,9 @@ async function calculateResponsibility() {
                     // }
                     
             }   
+            if(totalResponsibilityDays<0){
+                totalResponsibilityDays=0;
+            }
             const electricityAuthorityDays = totalDays - totalResponsibilityDays;
             console.log(electricityAuthorityDays)
             if (electricityAuthorityDays > 0) {

@@ -310,7 +310,6 @@ app.post('/upload030', upload.single('file'), (req, res) => {
     });
 });
 
-
 // ฟังก์ชันเพื่อ query ข้อมูล
 function queryDatabase(sql) {
     return new Promise((resolve, reject) => {
@@ -323,10 +322,9 @@ function queryDatabase(sql) {
     });
 }
 
-
-// Endpoint to fetch holidays
+// Endpoint สำหรับดึงข้อมูลวันหยุด
 app.get('/holidays', (req, res) => {
-    const sql = 'SELECT date, description FROM holiday';
+    const sql = 'SELECT id, date, description FROM holiday';
     connection.query(sql, (err, results) => {
         if (err) {
             console.error('Error fetching holidays:', err);
@@ -336,6 +334,94 @@ app.get('/holidays', (req, res) => {
         res.json(results);
     });
 });
+
+// Endpoint สำหรับบันทึกวันหยุด
+app.post('/add_holiday', (req, res) => {
+    const { date, description } = req.body;
+
+    if (!date || !description) {
+        res.status(400).send('Bad Request: Missing required fields');
+        return;
+    }
+
+    // ตรวจสอบว่ามีวันที่นี้อยู่แล้วหรือไม่
+    const checkDuplicateSql = 'SELECT * FROM holiday WHERE date = ?';
+    connection.query(checkDuplicateSql, [date], (err, results) => {
+        if (err) {
+            console.error('Error checking duplicate holiday:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length > 0) {
+            // ถ้ามีวันที่นี้อยู่แล้ว
+            res.status(400).send('Duplicate holiday date');
+            return;
+        }
+
+        // ถ้าไม่มีวันที่นี้ ให้ดำเนินการเพิ่มข้อมูล
+        const sql = 'INSERT INTO holiday (date, description) VALUES (?, ?)';
+        connection.query(sql, [date, description], (err, results) => {
+            if (err) {
+                console.error('Error adding holiday:', err);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+            res.send('Holiday added successfully');
+        });
+    });
+});
+
+// Endpoint สำหรับดึงข้อมูลวันหยุดโดย ID
+app.get('/holidays/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'SELECT id, date, description FROM holiday WHERE id = ?';
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('Error fetching holiday:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.json(results[0]);
+    });
+});
+
+// Endpoint สำหรับอัพเดตวันหยุด
+app.put('/update_holiday/:id', (req, res) => {
+    const { id } = req.params;
+    const { date, description } = req.body;
+
+    // เพิ่มการตรวจสอบค่าที่ได้รับมา
+    console.log('Update Holiday ID:', id);
+    console.log('Date:', date);
+    console.log('Description:', description);
+
+    const sql = 'UPDATE holiday SET date = ?, description = ? WHERE id = ?';
+    connection.query(sql, [date, description, id], (err, results) => {
+        if (err) {
+            console.error('Error updating holiday:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.send('Holiday updated successfully');
+    });
+});
+
+
+// Endpoint สำหรับลบวันหยุด
+app.delete('/delete_holiday/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM holiday WHERE id = ?';
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('Error deleting holiday:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.send('Holiday deleted successfully');
+    });
+});
+
 // ดึงข้อมูลมาแสดง
 app.get('/data', (req, res) => {
     const sqlCount = `
