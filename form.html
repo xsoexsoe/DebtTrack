@@ -35,17 +35,22 @@
             <li class="nav-item ">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Dashboard</span></a>
+                    <span class="custom-font" style="font-size: 20px;font-weight: bold;">Dashboard</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="uploadfile.html">
                     <i class="fas fa-fw fa-upload"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Upload File</span></a>
+                    <span class="custom-font" style="font-size:20px;font-weight: bold;">Upload File</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="table.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">รายละเอียดลูกหนี้</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="report.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
             <!-- เส้นแบ่ง -->
@@ -54,13 +59,13 @@
             <li class="nav-item ">
                 <a class="nav-link" href="holidays.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">วันหยุดประจำปี</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">วันหยุดประจำปี</span></a>
             </li>
 
             <li class="nav-item ">
                 <a class="nav-link" href="404.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">คู่มือการใช้งาน</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">คู่มือการใช้งาน</span></a>
             </li>
 
             <!-- ปุ่มเลื่อนเนื้อหา -->
@@ -96,40 +101,40 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col">
-                            <div class="card shadow border-start-primary py-2 form-container" style="background:#f6c9ff;">
-                                <header class="text-center text-primary" style="background:linear-gradient(#b744d5, #893a9d), #893a9d;">
-                                    <span class="text-center" style="font-family:Prompt, sans-serif;"><span style="color: rgb(255, 255, 255);font-family: Prompt, sans-serif; font-size: 24px;">ฟอร์มกรอกข้อมูล</span></span>
+                            <div class="card shadow border-start-primary py-2 form-container" style="background:#f7f7f7;">
+                                <header class="text-center text-primary" style="background:linear-gradient(#a3baf7, #18559b), #7fa4eb;">
+                                    <span class="text-center" style="font-family:Prompt, sans-serif;"><span style="color: rgb(255, 255, 255);font-family: Prompt, sans-serif; font-size: 35px;">ฟอร์มกรอกข้อมูล</span></span>
                                 </header>
                                 <div class="card-body">
                                     <form id="dataForm">
                                         <div class="row">
                                             <div class="col text-center">
-                                                <label for="id_command" class="form-label">คำสั่ง</label>
-                                                <input type="text" class="form-control text-center" id="id_command" required disabled>
+                                                <label for="id_command" class="form-label pf30">คำสั่ง</label>
+                                                <input type="text" class="form-control text-center pf30" id="id_command" required disabled>
                                             </div>
                                             <div class="col text-center">
-                                                <label for="customer_ca" class="form-label">หมายเลขผู้ใช้ไฟ</label>
-                                                <input type="text" class="form-control text-center" id="customer_ca" required disabled>
+                                                <label for="customer_ca" class="form-label pf30">หมายเลขผู้ใช้ไฟ</label>
+                                                <input type="text" class="form-control text-center pf30" id="customer_ca" required disabled>
                                             </div>
                                             <div class="col-xl-3 col-md-6 mb-4 text-center">
-                                                <label for="name" class="form-label">ชื่อ-สกุล</label>
-                                                <input type="text" class="form-control text-center" id="name" required disabled>
+                                                <label for="name" class="form-label pf30">ชื่อ-สกุล</label>
+                                                <input type="text" class="form-control text-center pf30" id="name" required disabled>
                                             </div>
                                             <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                                <label for="num_bills" class="form-label">จำนวนบิล</label>
-                                                <input type="text" class="form-control text-center" id="num_bills" required disabled>
+                                                <label for="num_bills" class="form-label pf30">จำนวนบิล</label>
+                                                <input type="text" class="form-control text-center pf30" id="num_bills" required disabled>
                                             </div>
                                             <div class="col-xl-2 col-md-6 mb-4 text-center">
-                                                <label for="total_money" class="form-label">จำนวนเงิน</label>
-                                                <input type="text" class="form-control text-end" id="total_money" required disabled>
+                                                <label for="total_money" class="form-label pf30">จำนวนเงิน</label>
+                                                <input type="text" class="form-control text-end pf30" id="total_money" required disabled>
                                             </div>
                                         </div>
                                         
                                         <div class="row">
                                             <div class="col ">
                                                 
-                                                <label for="portion" class="form-label">เลือก Portion จดหน่วย</label>
-                                                <select class="form-select text-center" id="portion">
+                                                <label for="portion" class="form-label pf30">เลือก Portion จดหน่วย</label>
+                                                <select class="form-select text-center pf30" id="portion">
                                                     <option value="A1">Portion A1</option>
                                                     <option value="A2">Portion A2</option>
                                                     <option value="A3">Portion A3</option>
@@ -149,75 +154,76 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <label for="date_system" class="form-label">วันที่ระบบอนุมัติ</label>
+                                                <label for="date_system" class="form-label pf30">วันที่ระบบอนุมัติ</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="date_system" required>
-                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
-                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                    <input type="text" class="form-control pf30" id="date_system" required>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-toggle="date_system"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-clear="date_system"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <label for="date_employee" class="form-label">วันที่พนักงานสั่งงาน</label>
+                                                <label for="date_employee" class="form-label pf30">วันที่พนักงานสั่งงาน</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="date_employee" required>
-                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
-                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                    <input type="text" class="form-control pf30" id="date_employee" required>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-toggle="date_employee"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-clear="date_employee"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <label for="date_company" class="form-label">วันที่ผู้รับเหมาปฏิบัติงาน</label>
+                                                <label for="date_company" class="form-label pf30">วันที่ผู้รับเหมาปฏิบัติงาน</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="date_company" required>
-                                                    <button class="btn btn-outline-secondary" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
-                                                    <button class="btn btn-outline-secondary" type="button" data-clear="date_company"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                    <input type="text" class="form-control pf30" id="date_company" required>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-toggle="date_company"><i class="fas fa-calendar-alt"></i></button>
+                                                    <button class="btn btn-outline-secondary pf30" type="button" data-clear="date_company"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                 </div>
                                             </div>
                                         
                             
                                         </div>
                                         <br>
+                                        
                                          <!-- Checkbox สำหรับเปิด/ปิดวันที่ผ่อนผัน -->
                                          <div class="form-group d-flex align-items-center">
-                                            <div class="form-check me-3 custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="enable_date_deferment">
-                                                <label for="enable_date_deferment" class="custom-control-label">ผ่อนผัน ครั้งที่ 1</label>
+                                            <div class="form" >
+                                                <input type="checkbox" style="width: 40px; height: 40px;" id="enable_date_deferment">
+                                                <label for="enable_date_deferment" class="pf30" style="vertical-align: top;">ผ่อนผัน ครั้งที่ 1</label>
                                             </div>
-                                            <div class="form-check custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="enable_date_deferment2">
-                                                <label for="enable_date_deferment2" class="custom-control-label">ผ่อนผัน ครั้งที่ 2</label>
+                                            <div class="form-check me-3 custom-control custom-checkbox">
+                                                <input type="checkbox" style="width: 50px; height: 40px;" id="enable_date_deferment2">
+                                                <label for="enable_date_deferment2" style="vertical-align: top;" class="pf30">ผ่อนผัน ครั้งที่ 2</label>
                                             </div>
                                         </div>
                                        
                                         <div class="row">
                                                 <div class="col" id="date_deferment_container" style="display: none;">
-                                                    <label for="date_deferment" class="form-label">วันที่ผ่อนผัน ครั้งที่ 1</label>
+                                                    <label for="date_deferment" class="form-label pf30">วันที่ผ่อนผัน ครั้งที่ 1</label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_deferment" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                        <input type="text" class="form-control pf30" id="date_deferment" required>
+                                                        <button class="btn btn-outline-secondary pf30" type="button" data-toggle="date_deferment"><i class="fas fa-calendar-alt"></i></button>
+                                                        <button class="btn btn-outline-secondary pf30" type="button" data-clear="date_deferment"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col" id="date_deferment2_container" style="display: none;">
-                                                    <label for="date_deferment2" class="form-label">วันที่ผ่อนผัน ครั้งที่ 2</label>
+                                                    <label for="date_deferment2" class="form-label pf30">วันที่ผ่อนผัน ครั้งที่ 2</label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="date_deferment2" required>
-                                                        <button class="btn btn-outline-secondary" type="button" data-toggle="date_deferment2"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary" type="button" data-clear="date_deferment2"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                        <input type="text" class="form-control pf30" id="date_deferment2" required>
+                                                        <button class="btn btn-outline-secondary pf30" type="button" data-toggle="date_deferment2"><i class="fas fa-calendar-alt"></i></button>
+                                                        <button class="btn btn-outline-secondary pf30" type="button" data-clear="date_deferment2"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                     </div>
                                                 </div>
                                         </div>
                                         <br>
                                         <div class="row">
                                             <div class="col">
-                                                <label for="file1" class="form-label">อัพโหลดรูปวันจดหน่วย</label>
-                                                <input type="file" class="form-control" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
+                                                <label for="file1" class="form-label pf30">อัพโหลดรูปวันจดหน่วย</label>
+                                                <input type="file" class="form-control pf30" id="file1" name="file1" onchange="previewFile('file1', 'preview1')">
                                                 <div class="image-container">
                                                     <img id="preview1" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <label for="file2" class="form-label">อัพโหลดรูปประวัติติดตาม</label>
-                                                <input type="file" class="form-control" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
+                                                <label for="file2" class="form-label pf30">อัพโหลดรูปประวัติติดตาม</label>
+                                                <input type="file" class="form-control pf30" id="file2" name="file2" onchange="previewFile('file2', 'preview2')">
                                                 <div class="image-container">
                                                     <img id="preview2" src="#" alt="Image Preview" style="display:none; width: 100%; height: auto;">
                                                 </div>
@@ -226,16 +232,16 @@
                                         <br>
                                         <div class="row justify-content-center">
                                             <div class="col text-center">
-                                                <button type="button" id="calculateButton" class="btn btn-primary" style="height: 50px; width: 200px;">คำนวณ</button>
+                                                <button type="button" id="calculateButton" class="btn btn-primary pf30" >คำนวณ</button>
                                             </div>
                                             <div class="col text-center">
-                                                <button type="button" id="printButton" class="btn btn-secondary" style="height: 50px; width: 200px;">ปริ้น</button>
+                                                <button type="button" id="printButton" class="btn btn-secondary pf30" >ปริ้น</button>
                                             </div>
                                         </div>
                                         <br>
                                         <div class="row justify-content-center">
                                             <div class="col text-center">
-                                                <button type="submit" class="btn btn-primary" style="height: 50px; width: 200px;">บันทึก</button>
+                                                <button type="submit" class="btn btn-primary pf30">บันทึก</button>
                                             </div>
                                         </div>
                                     </form>
@@ -251,7 +257,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-layout small-font" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered table-layout " id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr class="text-center align-middle ">
                                                 <th class="text-center align-middle" rowspan="2">บิลเดือน</th>

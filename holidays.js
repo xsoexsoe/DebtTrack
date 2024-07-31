@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 holidays.forEach(holiday => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td class="text-center align-middle">${formatDateForDisplay(new Date(holiday.date))}</td>
+                        <td class="text-center align-middle" style="width: 25%;">${formatDateForDisplay(new Date(holiday.date))}</td>
                         <td class="text-center align-middle">${holiday.description}</td>
                         <td>
                             <button class="btn btn-outline-danger btn-md d-sm-inline-block" style="font-family: Prompt, sans-serif;font-size: 18px;" onclick="deleteHoliday(${holiday.id}, event)">ลบ</button>

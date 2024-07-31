@@ -19,6 +19,21 @@
     <!-- Custom styles for this page -->
     <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     
+    <style>
+        /* Increase font size for length menu and other DataTable elements */
+        .dataTables_length, 
+        .dataTables_filter, 
+        .dataTables_info, 
+        .dataTables_paginate, 
+        .dataTables_wrapper .dataTables_processing, 
+        .dataTables_wrapper .dataTables_paginate {
+            font-size: 30px; /* Adjust the size as needed */
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            font-size: 30px; /* Adjust the size as needed */
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -46,17 +61,22 @@
             <li class="nav-item ">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Dashboard</span></a>
+                    <span class="custom-font" style="font-size:20px;font-weight: bold;">Dashboard</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="uploadfile.html">
                     <i class="fas fa-fw fa-upload"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Upload File</span></a>
+                    <span class="custom-font" style="font-size:20px;font-weight: bold;">Upload File</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="table.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">รายละเอียดลูกหนี้</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="report.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
             <!-- เส้นแบ่ง -->
@@ -65,13 +85,13 @@
             <li class="nav-item ">
                 <a class="nav-link" href="holidays.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">วันหยุดประจำปี</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">วันหยุดประจำปี</span></a>
             </li>
 
             <li class="nav-item ">
                 <a class="nav-link" href="404.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">คู่มือการใช้งาน</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">คู่มือการใช้งาน</span></a>
             </li>
 
 
@@ -104,22 +124,22 @@
                     </a>
                  </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4 font">กฟส.เขมราฐ</h3>
+                    
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">รายละเอียดลูกหนี้</h6>
+                            <h6 class="m-0 font-weight-bold text-primary pf30">รายละเอียดลูกหนี้</h6>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="yearFilter" class="form-label">Filter by Year:</label>
-                                <select id="yearFilter" class="form-select">
+                                <label for="yearFilter" class="form-label pf30">Filter by Year:</label>
+                                <select id="yearFilter" class="form-select pf30">
                                     <option value="">All</option>
                                     <!-- Options will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="commandFilter" class="form-label">Filter by Command:</label>
-                                <select id="commandFilter" class="form-select">
+                                <label for="commandFilter" class="form-label pf30">Filter by Command:</label>
+                                <select id="commandFilter" class="form-select pf30">
                                     <option value="">All</option>
                                     <!-- Options will be populated dynamically -->
                                 </select>
@@ -127,8 +147,8 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="statusFilter" class="form-label">Filter by Status:</label>
-                                <select id="statusFilter" class="form-select">
+                                <label for="statusFilter" class="form-label pf30">Filter by Status:</label>
+                                <select id="statusFilter" class="form-select pf30">
                                     <option value="">All</option>
                                     <option value="ชำระเงินเรียบร้อยแล้ว">ชำระเงินเรียบร้อยแล้ว</option>
                                     <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
@@ -136,7 +156,7 @@
                                 </select>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" style="font-family: Prompt, sans-serif;font-size:20px;" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr class="text-center align-middle">
                                             <th>กฟฟ.</th>

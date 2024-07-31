@@ -11665,3 +11665,12 @@ textarea.form-control-lg {
   -moz-appearance: none;
   appearance: none;
 }
+.pf30{
+  font-family: Prompt sans-serif; 
+  font-size: 30px;
+}
+.pf20{
+  font-family: Prompt sans-serif; 
+  font-size: 20px;
+  font-weight: bold;
+}

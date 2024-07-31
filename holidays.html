@@ -35,7 +35,15 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 20px;">รายละเอียดลูกหนี้</span></a>
             </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="report.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
+            </li>
+            
+            <!-- เส้นแบ่ง -->
             <hr class="sidebar-divider d-none d-md-block">
+
             <li class="nav-item ">
                 <a class="nav-link" href="holidays.html">
                     <i class="fas fa-fw fa-book"></i>
@@ -69,37 +77,37 @@
                                 <div class="col-lg-7">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4 " style="font-family: Prompt, sans-serif;font-size: 26px; ">เพิ่มวันหยุดประจำปี</h1>
+                                            <h1 class="h4 text-gray-900 mb-4 " style="font-family: Prompt, sans-serif;font-size: 40px; font-weight: bold; ">เพิ่มวันหยุดประจำปี</h1>
                                         </div>
                                         <form class="user">
                                             <div class="form-group">
-                                                <div class="col-auto">
-                                                    <div class="input-group">
+                                                <div class="col justify-content-center">
+                                                    <div class="input-group justify-content-center">
                                                         <input type="hidden" id="holiday-id" name="id">
-                                                        <input type="text" class="form-control form-control-user" id="date_holiday" placeholder="วันที่หยุด" style="font-family: Prompt, sans-serif;font-size: 18px;">
-                                                        <button class="btn btn-outline-secondary btn-lg" type="button" data-toggle="date_holiday"><i class="fas fa-calendar-alt"></i></button>
-                                                        <button class="btn btn-outline-secondary btn-lg" type="button" data-clear="date_holiday"><i class="fas fa-times" style="color: crimson;"></i></button>
+                                                        <input type="text" class="form-control pf30 " id="date_holiday" placeholder="เลือกวันที่" >
+                                                        <button class="btn btn-outline-secondary btn-lg " type="button" data-toggle="date_holiday"><i class="fas fa-calendar-alt"></i></button>
+                                                        <button class="btn btn-outline-secondary btn-lg " type="button" data-clear="date_holiday"><i class="fas fa-times" style="color: crimson;"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div class="col-auto">
-                                                    <input type="text" class="form-control form-control-user" id="description" placeholder="วันหยุด เช่น วัดแรงงาน" style="font-family: Prompt, sans-serif;font-size: 18px;">
+                                                <div class="col justify-content-center">
+                                                    <textarea class="form-control pf30" id="description" rows="4" placeholder="วันหยุด เช่น วัดแรงงาน" required></textarea>  
                                                 </div>
                                             </div>
                                             <div class="form-group row text-center align-middle">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col text-center">
                                                     <button type="button" id="save-button" class="btn btn-primary" style="height: 65px; width: 150px; font-family: Prompt, sans-serif;font-size: 25px;">บันทึก</button>
                                                 </div>
                                             </div>
                                             <br>
                                             <div class="card shadow mb-5">
                                                 <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary" style="font-family: Prompt, sans-serif;font-size: 25px;">รายละเอียดวันหยุด</h6>
+                                                    <h6 class="m-0 font-weight-bold text-primary pf30" >รายละเอียดวันหยุด</h6>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-layout small-font" id="dataTable" width="100%" cellspacing="0">
+                                                        <table class="table table-bordered table-layout " id="dataTable" width="100%" cellspacing="0">
                                                             <thead>
                                                                 <tr class="text-center align-middle text-lg">
                                                                     <th class="text-center align-middle">วันที่</th>

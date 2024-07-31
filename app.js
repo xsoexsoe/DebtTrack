@@ -546,6 +546,23 @@ app.post('/save-date', (req, res) => {
     });
 });
 
+// end point ลงแมพ
+app.get('/debtors', (req, res) => {
+    let sql = 'SELECT name, latitude, longitude FROM customer';
+    db.query(sql, (err, results) => {
+        if (err) {
+            throw err;
+        }
+        res.json(results);
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
+});
+
+
+
 // เริ่มต้นเซิร์ฟเวอร์ที่พอร์ต 5500
 app.listen(5500, () => {
     console.log('Server is running on port 5500');

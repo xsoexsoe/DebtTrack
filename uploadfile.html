@@ -40,17 +40,22 @@
             <li class="nav-item ">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Dashboard</span></a>
+                    <span class="custom-font" style="font-size:20px;font-weight: bold;">Dashboard</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="uploadfile.html">
                     <i class="fas fa-fw fa-upload"></i>
-                    <span class="custom-font" style="font-size: 18px;font-weight: bold;">Upload File</span></a>
+                    <span class="custom-font" style="font-size:20px;font-weight: bold;">Upload File</span></a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="table.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">รายละเอียดลูกหนี้</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="report.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
             <!-- เส้นแบ่ง -->
@@ -59,13 +64,13 @@
             <li class="nav-item ">
                 <a class="nav-link" href="holidays.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">วันหยุดประจำปี</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">วันหยุดประจำปี</span></a>
             </li>
 
             <li class="nav-item ">
                 <a class="nav-link" href="404.html">
                     <i class="fas fa-fw fa-book"></i>
-                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size: 18px;">คู่มือการใช้งาน</span></a>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">คู่มือการใช้งาน</span></a>
             </li>
 
             <!-- ปุ่มเลื่อนเนื้อหา -->
@@ -103,19 +108,19 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <a class="btn btn-primary btn-icon-split" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                                    <span class="icon text-white-50">  
-                                        <i class="fas fa-upload"></i>
+                                    <span class="icon text-white-50 pf30">  
+                                        <i class="fas fa-upload pf30"></i>
                                     </span>
-                                    <span class="text">อัพโหลดไฟล์ลูกหนี้ 121</span>
+                                    <span class="text pf30">อัพโหลดไฟล์ลูกหนี้ 121</span>
                                 </a>
                             </div>
                             <!-- Button trigger modal -->
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <a class="btn btn-primary btn-icon-split" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal030" onclick="loadDataForUpload()">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-upload"></i>
+                                    <span class="icon text-white-50 pf30">
+                                        <i class="fas fa-upload pf30"></i>
                                     </span>
-                                    <span class="text">อัพโหลดไฟล์ ZCANR030</span>
+                                    <span class="text pf30">อัพโหลดไฟล์ ZCANR030</span>
                                 </a>
                             </div>
 
@@ -135,26 +140,26 @@
 
     <!-- Modal for upload file 121 -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">อัพโหลดไฟล์ลูกหนี้ 121</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title pf30" id="uploadModalLabel">อัพโหลดไฟล์ลูกหนี้ 121</h5>
+                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="uploadForm121">
                         <div class="mb-3">
-                            <label for="orderNumber121" class="form-label">เลขที่คำสั่ง (ฉ.2พ.145)</label>
-                            <input type="text" class="form-control" id="orderNumber121" required>
+                            <label for="orderNumber121" class="form-label pf30">เลขที่คำสั่ง (ฉ.2พ.145)</label>
+                            <input type="text" class="form-control pf30" id="orderNumber121" required>
                         </div>
                         <div class="mb-3">
-                            <label for="year121" class="form-label">ปี (พ.ศ.)</label>
-                            <input type="text" class="form-control" id="year121" required>
+                            <label for="year121" class="form-label pf30">ปี (พ.ศ.)</label>
+                            <input type="text" class="form-control pf30" id="year121" required>
                         </div>
                         <div class="container py-4 py-xl-5" style="margin-bottom: -47px;">
                             <div class="files color form-group mb-3"><input type="file" multiple="" id="fileInput" accept=".xls, .xlsx" name="files" required></div>
                         </div>
-                        <div class="d-grid gap-2 col-1 mx-md-auto"><button class="btn btn-primary" type="button" onclick="uploadExcel121()">อัพโหลด</button></div>
+                        <div class="col text-center"><button class="btn btn-primary pf30" type="button" onclick="uploadExcel121()">อัพโหลด</button></div>
                         <div class="overlay" id="overlay">
                             <div class="loader"></div>
                         </div>
@@ -166,26 +171,26 @@
 
     <!-- Modal for upload file 030 -->
     <div class="modal fade" id="uploadModal030" tabindex="-1" aria-labelledby="uploadModalLabel030" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel030">อัพโหลดไฟล์ ZCANR030</h5>
+                    <h5 class="modal-title pf30" id="uploadModalLabel030">อัพโหลดไฟล์ ZCANR030</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="uploadForm030">
                         <div class="mb-3">
-                            <label for="year030" class="form-label">ปี</label>
-                            <select class="form-control" id="year030" required></select>
+                            <label for="year030" class="form-label pf30">ปี</label>
+                            <select class="form-control pf30" id="year030" required></select>
                         </div>
                         <div class="mb-3">
-                            <label for="orderNumber030" class="form-label">เลขที่คำสั่ง</label>
-                            <select class="form-control" id="orderNumber030" required></select>
+                            <label for="orderNumber030" class="form-label pf30">เลขที่คำสั่ง</label>
+                            <select class="form-control pf30" id="orderNumber030" required></select>
                         </div>
                         <div class="container py-4 py-xl-5" style="margin-bottom: -47px;">
                             <div class="files color form-group mb-3"><input type="file" multiple="" id="fileInput030" accept=".xls, .xlsx" name="files" required></div>
                         </div>
-                        <div class="d-grid gap-2 col-1 mx-md-auto"><button class="btn btn-primary" type="button" onclick="uploadExcel030()">อัพโหลด</button></div>
+                        <div class="col text-center"><button class="btn btn-primary pf30" type="button" onclick="uploadExcel030()">อัพโหลด</button></div>
                         <div class="overlay" id="overlay030">
                             <div class="loader"></div>
                         </div>
