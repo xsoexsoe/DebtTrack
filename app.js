@@ -17,6 +17,74 @@ app.use(cors());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+app.post('/upload-etsx', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        console.error('No file uploaded.');
+        return res.status(400).json({ success: false, message: 'No file uploaded.' });
+    }
+
+    let workbook;
+    try {
+        workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    } catch (error) {
+        console.error('Error reading Excel file:', error);
+        return res.status(500).json({ success: false, message: 'Error reading Excel file.', error: error.message });
+    }
+
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval: null }); // Set default value to null for empty cells
+
+    console.log('Rows extracted from Excel:', rows); // Debugging log
+
+    try {
+        const updatePromises = rows.map(row => {
+            // Convert CA_NO to string and remove the first character
+            const originalCaNo = row.CA_NO ? row.CA_NO.toString() : null;
+            const caNo = originalCaNo ? originalCaNo.substring(1) : null;
+
+            // Check required fields
+            if (row.Latitude == null || row.Longitude == null || row.Address == null || !caNo) {
+                console.error('Missing required fields in row:', row);
+                throw new Error('Missing required fields in row: ' + JSON.stringify(row));
+            }
+
+            console.log(`Processing CA_NO: ${originalCaNo} => ${caNo}`); // Debugging log
+
+            // Prepare the SQL query using placeholders
+            const updateQuery = `UPDATE customer SET latitude = ?, longitude = ?, address = ? WHERE ca = ?`;
+
+            // Return a promise to execute the query
+            return new Promise((resolve, reject) => {
+                connection.query(updateQuery, [row.Latitude, row.Longitude, row.Address, caNo], (err, result) => {
+                    if (err) {
+                        console.error('Database update failed:', err);
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+        });
+
+        // Execute all update queries
+        Promise.all(updatePromises)
+            .then(results => {
+                console.log('Database updated successfully.');
+                res.json({ success: true, message: 'Database updated successfully.' });
+            })
+            .catch(error => {
+                console.error('Error processing updates:', error);
+                res.status(500).json({ success: false, message: 'Database update failed.', error: error.message });
+            });
+
+    } catch (error) {
+        console.error('Error processing rows:', error);
+        res.status(500).json({ success: false, message: 'Error processing rows.', error: error.message });
+    }
+});
+
+
+
+
 // API เพื่อดึงข้อมูล id_command
 app.get('/api/id_commands', (req, res) => {
     const sql = 'SELECT id_command FROM bills';
@@ -546,12 +614,12 @@ app.post('/save-date', (req, res) => {
     });
 });
 
-// end point ลงแมพ
 app.get('/debtors', (req, res) => {
-    let sql = 'SELECT name, latitude, longitude FROM customer';
-    db.query(sql, (err, results) => {
+    const sql = 'SELECT name, latitude, longitude FROM customer';
+    connection.query(sql, (err, results) => {
         if (err) {
-            throw err;
+            console.error('Error executing query:', err);
+            return res.status(500).json({ error: 'Database query failed' });
         }
         res.json(results);
     });

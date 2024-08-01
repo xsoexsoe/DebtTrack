@@ -124,6 +124,16 @@
                                 </a>
                             </div>
 
+                            <!-- Button trigger modal -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <a class="btn btn-primary btn-icon-split" href="#" data-bs-toggle="modal" data-bs-target="#uploadEtsxModal">
+                                    <span class="icon text-white-50 pf30">
+                                        <i class="fas fa-upload pf30"></i>
+                                    </span>
+                                    <span class="text pf30">อัพโหลดพิกัดจาก Etsx</span>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -137,6 +147,33 @@
             </footer>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+
+    <!-- Modal for uploading latitude and longitude from Etsx -->
+    <div class="modal fade" id="uploadEtsxModal" tabindex="-1" aria-labelledby="uploadEtsxModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pf30" id="uploadEtsxModalLabel">Upload Latitude and Longitude from Etsx</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadFormEtsx">
+                        <div class="mb-3">
+                            <label for="fileInputEtsx" class="form-label pf30">Select Excel File</label>
+                            <input type="file" class="form-control pf30" id="fileInputEtsx" accept=".xls, .xlsx" name="files" required>
+                        </div>
+                        <div class="col text-center">
+                            <button class="btn btn-primary pf30" type="button" onclick="uploadExcelEtsx()">Upload</button>
+                        </div>
+                        <div class="overlay" id="overlayEtsx">
+                            <div class="loader"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal for upload file 121 -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -243,6 +280,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
     <script src="assets/function/upload.js"></script>
     <script src="assets/function/upload030.js"></script>
+    <script src="assets/function/uploadEtsx.js"></script>
 </body>
 
 </html>
