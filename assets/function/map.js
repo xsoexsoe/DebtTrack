@@ -61,8 +61,9 @@ require([
 
         graphicsLayer.add(userPointGraphic);
 
-        // Fetch debtor data from the server
-        fetch('http://localhost:5500/debtors')
+        // Fetch debtor data from the server using correct URL
+
+        fetch(`/debtors`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -115,23 +116,9 @@ require([
             });
     }
 
-    // Check if the browser supports geolocation
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                setMapView(latitude, longitude); // Use current location for MapView
-            },
-            error => {
-                console.error('Error obtaining location:', error);
-                // Use default location if unable to obtain current position
-                setMapView(13.736717, 100.523186); // Default to Bangkok
-            }
-        );
-    } else {
-        alert("Your browser does not support geolocation.");
-        // Use default location if geolocation is not supported
-        setMapView(13.736717, 100.523186);
-    }
+    // Set default coordinates without using geolocation
+    const defaultLatitude = 16.037677;
+    const defaultLongitude = 105.220073;
+    setMapView(defaultLatitude, defaultLongitude); // Use default coordinates for MapView
+    
 });

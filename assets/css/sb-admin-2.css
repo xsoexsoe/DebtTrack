@@ -64,9 +64,12 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #858796;
   text-align: left;
-  background-color: #fff;
+  background-image: url('../img/background2.jpg'); /* เส้นทางสัมพัทธ์จาก sb-admin-2.css ไปยังภาพ */
+  background-size: cover; /* ให้ภาพคลุมพื้นที่ทั้งหมด */
+  background-repeat: no-repeat; /* ป้องกันการซ้ำของภาพ */
+  background-position: center; /* จัดตำแหน่งภาพให้อยู่ตรงกลาง */
+  background-attachment: fixed; /* ทำให้ภาพพื้นหลังไม่เลื่อน */
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -6480,6 +6483,9 @@ button.bg-secondary:focus {
 .bg-success {
   background-color: #1cc88a !important;
 }
+.bg-success {
+  background-color: #1cc88a !important;
+}
 
 a.bg-success:hover, a.bg-success:focus,
 button.bg-success:hover,
@@ -9849,9 +9855,10 @@ a:focus {
 }
 
 #wrapper #content-wrapper {
-  background-color: #f8f9fc;
+ 
   width: 100%;
   overflow-x: hidden;
+  position: relative;
 }
 
 #wrapper #content-wrapper #content {
@@ -11674,7 +11681,19 @@ textarea.form-control-lg {
   font-size: 20px;
   font-weight: bold;
 }
-
+.pf20n{
+  font-family: Prompt sans-serif; 
+  font-size: 20px;
+}
+.pf16n{
+  font-family: Prompt sans-serif; 
+  font-size: 16px;
+}
+.pf16{
+  font-family: Prompt sans-serif; 
+  font-size: 16px;
+  font-weight: bold;
+}
 /* Styles for the circular navigation button */
 .navigation-button {
   display: flex;
@@ -11709,3 +11728,23 @@ textarea.form-control-lg {
   color: #333; /* Text color */
 }
 
+.status-pending-count{
+  background-color: #b7c1f9 !important;
+  color: #ffffff;
+  font-size: 16px;
+}
+.status-unpaid-count{
+  background-color: #f44465 !important;
+  color: #ffffff;
+  font-size: 16px;
+}
+.status-complete{
+  background-color: #00a653 !important;
+  color: #ffffff;
+  font-size: 16px;
+}
+.status-paid-count{
+  background-color: #008dff !important;
+  color: #ffffff;
+  font-size: 16px;
+}

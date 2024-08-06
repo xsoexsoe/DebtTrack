@@ -52,9 +52,14 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="mapdebtt.html">
+                    <i class="fas fa-fw fa-map-marker"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">พิกัดลูกหนี้</span></a>
+            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="report.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-file-pdf"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
@@ -79,27 +84,28 @@
             </div>
 
          </ul>
-               <!-- ตัวห่อหุ้มเนื้อหา -->
-            <div id="content-wrapper" class="d-flex flex-column">
-    
-                <!-- เนื้อหาหลัก -->
-                <div id="content">
-    
-                    <!-- แถบด้านบน -->
-                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+           <!-- ตัวห่อหุ้มเนื้อหา -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- เนื้อหาหลัก -->
+            <div id="content">
+
+                <!-- แถบด้านบน -->
+                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                
+                    <!-- ปุ่มแถบด้านข้าง -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
                     
-                        <!-- ปุ่มแถบด้านข้าง -->
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        
-                        <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
-                        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
-                            <div class="sidebar-brand-text mx-3">
-                                <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
-                            </div> 
-                        </a>
-                     </nav>
+                    <!-- โลโก้แบรนด์ในแถบด้านข้าง -->
+                    <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">    
+                        <div class="sidebar-brand-text mx-3">
+                            <span class="text-capitalize fs-4 custom-font" style="font-size: 30px;font-weight: bold;color: rgb(99, 98, 98);">DebtTrack</span>
+                        </div> 
+                    </a>
+                 </nav>
                 <!-- จบแถบด้านบน -->
 
                     <div class="container-fluid">
@@ -109,9 +115,9 @@
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <a class="btn btn-primary btn-icon-split" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">
                                     <span class="icon text-white-50 pf30">  
-                                        <i class="fas fa-upload pf30"></i>
+                                        <i class="fas fa-upload pf30 "></i>
                                     </span>
-                                    <span class="text pf30">อัพโหลดไฟล์ลูกหนี้ 121</span>
+                                    <span class="text pf30">อัพโหลดไฟล์ ลูกหนี้ 121</span>
                                 </a>
                             </div>
                             <!-- Button trigger modal -->
@@ -130,24 +136,23 @@
                                     <span class="icon text-white-50 pf30">
                                         <i class="fas fa-upload pf30"></i>
                                     </span>
-                                    <span class="text pf30">อัพโหลดพิกัดจาก Etsx</span>
+                                    <span class="text pf30">อัพโหลดไฟล์ พิกัดจาก Etsx</span>
                                 </a>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                    
-            </div>
-        </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
-                </div>
-            </footer>
-        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+              
+        
+<footer class="bg-white sticky-footer">
+    <div class="container my-auto">
+        <div class="text-center my-auto copyright"><span>Copyright © DebtTrack 2024</span></div>
     </div>
+</footer>
+</div><a class="d-inline border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
 
+</div>
     <!-- Modal for uploading latitude and longitude from Etsx -->
     <div class="modal fade" id="uploadEtsxModal" tabindex="-1" aria-labelledby="uploadEtsxModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">

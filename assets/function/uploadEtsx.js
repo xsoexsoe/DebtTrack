@@ -11,7 +11,7 @@ function uploadExcelEtsx() {
     var overlay = document.getElementById('overlayEtsx');
     overlay.style.display = 'block';
 
-    fetch('http://localhost:5500/upload-etsx', {
+    fetch('/upload-etsx', {
         method: 'POST',
         body: formData
     }).then(response => {

@@ -27,11 +27,17 @@
         .dataTables_paginate, 
         .dataTables_wrapper .dataTables_processing, 
         .dataTables_wrapper .dataTables_paginate {
-            font-size: 30px; /* Adjust the size as needed */
+            font-size: 20px; /* Adjust the size as needed */
         }
 
         .dataTables_wrapper .dataTables_length select {
-            font-size: 30px; /* Adjust the size as needed */
+            font-size: 20px; /* Adjust the size as needed */
+        }
+        .form-control-sm{
+            font-size: 20px;
+        }
+        .custom-select {
+            background: #fff;
         }
     </style>
 </head>
@@ -73,9 +79,14 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="mapdebtt.html">
+                    <i class="fas fa-fw fa-map-marker"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">พิกัดลูกหนี้</span></a>
+            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="report.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-file-pdf"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
@@ -127,19 +138,19 @@
                     
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary pf30">รายละเอียดลูกหนี้</h6>
+                            <h6 class="m-0 font-weight-bold text-primary pf20">รายละเอียดลูกหนี้</h6>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="yearFilter" class="form-label pf30">Filter by Year:</label>
-                                <select id="yearFilter" class="form-select pf30">
+                                <label for="yearFilter" class="form-label pf20">ปีคำสั่ง:</label>
+                                <select id="yearFilter" class="form-select pf20n">
                                     <option value="">All</option>
                                     <!-- Options will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="commandFilter" class="form-label pf30">Filter by Command:</label>
-                                <select id="commandFilter" class="form-select pf30">
+                                <label for="commandFilter" class="form-label pf20">เลขที่คำสั่ง:</label>
+                                <select id="commandFilter" class="form-select pf20n">
                                     <option value="">All</option>
                                     <!-- Options will be populated dynamically -->
                                 </select>
@@ -147,10 +158,10 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="statusFilter" class="form-label pf30">Filter by Status:</label>
-                                <select id="statusFilter" class="form-select pf30">
+                                <label for="statusFilter" class="form-label pf20">สถานะ:</label>
+                                <select id="statusFilter" class="form-select pf20n">
                                     <option value="">All</option>
-                                    <option value="ชำระเงินเรียบร้อยแล้ว">ชำระเงินเรียบร้อยแล้ว</option>
+                                    <option value="ชำระเงินแล้ว">ชำระเงินเรียบร้อยแล้ว</option>
                                     <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
                                     <option value="ยังไม่ดำเนินการ">ยังไม่ดำเนินการ</option>
                                 </select>

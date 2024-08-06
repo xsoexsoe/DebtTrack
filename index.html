@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alexandria&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-
+   
 
 </head>
 
@@ -52,9 +52,14 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="mapdebtt.html">
+                    <i class="fas fa-fw fa-map-marker"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">พิกัดลูกหนี้</span></a>
+            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="report.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-file-pdf"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
 
@@ -106,23 +111,23 @@
                  <!-- เริ่มเนื้อหาของหน้า -->
                 <div class="container-fluid">
                 
-                    <!-- หัวข้อของหน้า -->
+                    <!-- หัวข้อของหน้า
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 style="font-family: Prompt, sans-serif;font-size: 30px;">กฟส.เขมราฐ</h1>
-                    </div>
+                    </div> -->
                     
                     <!-- แถวของเนื้อหา -->
                     <div class="row">
 
-                        <!-- การ์ดจำนวนราย -->
+                        <!-- การ์ดจำนวนราย - รอพิจารณา -->
                         <div class="col-xl-2 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary custom-font mb-1">
-                                                รอพิจารณา (ราย)</div>
-                                            <div class="h4 mb-0 font-weight-bold text-gray-800">0</div>
+                                                รอพิจารณา (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 pending-count">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -132,15 +137,33 @@
                             </div>
                         </div>
 
-                        <!-- การ์ดจำนวนราย -->
+                        <!-- การ์ดจำนวนราย - ยังไม่ได้ชำระเงิน -->
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-lg font-weight-bold text-primary custom-font mb-1">
+                                                ยังไม่ได้ชำระเงิน (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 unpaid-count">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- การ์ดจำนวนราย - ชำระเงินแล้ว -->
                         <div class="col-xl-2 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary custom-font mb-1">
-                                                ชำระเงินแล้ว (ราย)</div>
-                                            <div class="h4 mb-0 font-weight-bold text-gray-800">0</div>
+                                                ชำระเงินแล้ว (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 paid-count">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -150,15 +173,15 @@
                             </div>
                         </div>
 
-                        <!-- การ์ดจำนวนราย -->
+                        <!-- กฟภ.รับผิดชอบ (PEA Responsible) -->
                         <div class="col-xl-2 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary custom-font mb-1">
-                                                กฟภ.รับผิดชอบ(ราย)</div>
-                                            <div class="h4 mb-0 font-weight-bold text-gray-800">0</div>
+                                                กฟภ.รับผิดชอบ (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 pea-responsible-count">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -168,15 +191,15 @@
                             </div>
                         </div>
 
-                        <!-- การ์ดจำนวนราย -->
-                        <div class="col-xl-2 col-md-5 mb-4">
+                        <!-- พนักงานรับผิดชอบ (Employee Responsible) -->
+                        <div class="col-xl-2 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary custom-font mb-1">
-                                                พนักงานรับผิดชอบ(ราย)</div>
-                                            <div class="h4 mb-0 font-weight-bold text-gray-800">0</div>
+                                                พนักงานรับผิดชอบ (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 employee-responsible-count">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -185,16 +208,16 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- การ์ดจำนวนราย -->
+
+                        <!-- ผู้รับเหมารับผิดชอบ (Contractor Responsible) -->
                         <div class="col-xl-2 col-md-6 mb-4">
-                            <div class="card border-bottom-success shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary custom-font mb-1">
-                                                ผู้รับเหมารับผิดชอบ(ราย)</div>
-                                            <div class="h4 mb-0 font-weight-bold text-gray-800">0</div>
+                                                ผู้รับเหมารับผิดชอบ (บิล)</div>
+                                            <div class="h4 mb-0 font-weight-bold text-gray-800 contractor-responsible-count">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -203,11 +226,9 @@
                                 </div>
                             </div>
                         </div>
-                        
-                
                     </div>
-                    <div class="row"></div>
                 </div>
+      
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
@@ -215,11 +236,44 @@
                 </div>
             </footer>
         </div><a class="d-inline border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
+             fetch('/api/status-counts')
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.pending-count').textContent = data['ยังไม่ได้ดำเนินการ'] || 0;
+                    document.querySelector('.unpaid-count').textContent = data['ยังไม่ได้ชำระเงิน'] || 0;
+                    document.querySelector('.paid-count').textContent = data['ชำระเงินเรียบร้อยแล้ว'] || 0;
+                    document.querySelector('.pea-responsible-count').textContent = data['กฟภ.รับผิดชอบ'] || 0;
+                    document.querySelector('.employee-responsible-count').textContent = data['พนักงานรับผิดชอบ'] || 0;
+                    document.querySelector('.contractor-responsible-count').textContent = data['ผู้รับเหมารับผิดชอบ'] || 0;
+                })
+                .catch(error => {
+                    console.error('Error fetching status counts:', error);
+                });
+        });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            
+                fetch('/api/responsible-counts')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('.pea-responsible-count').textContent = data.pea_responsible_count || 0;
+                        document.querySelector('.employee-responsible-count').textContent = data.employee_responsible_count || 0;
+                        document.querySelector('.contractor-responsible-count').textContent = data.contractor_responsible_count || 0;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching responsible counts:', error);
+                    });
+            });
+        </script>
 </body>
 
 </html>

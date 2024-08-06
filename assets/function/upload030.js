@@ -1,5 +1,6 @@
 function loadDataForUpload() {
-    fetch('http://localhost:5500/api/id_commands')
+
+     fetch('/api/id_commands')
         .then(response => response.json())
         .then(data => {
             // console.log('Fetched id_commands:', data); // เพิ่ม console.log เพื่อตรวจสอบข้อมูลที่ดึงมา
@@ -87,7 +88,8 @@ async function uploadExcel030() {
     overlay.style.display = 'block'; // แสดง pop-up
 
     try {
-        const response = await fetch('http://localhost:5500/upload030', {
+
+        const response = await fetch('/upload030', {
             method: 'POST',
             body: formData
         });

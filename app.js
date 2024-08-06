@@ -3,15 +3,128 @@ const multer = require('multer');
 const XLSX = require('xlsx');
 const connection = require('./assets/db/db'); // เรียกใช้ไฟล์การเชื่อมต่อกับฐานข้อมูล
 const cors = require('cors');
+const fs = require('fs');
 const bodyParser = require('body-parser');
-
+const path = require('path'); // ต้องมีบรรทัดนี้ในการใช้งาน path module
 const app = express();
+require('dotenv').config();
+
 app.use(bodyParser.json()); // ใช้ body-parser เพื่ออ่าน JSON payloads
 app.use(bodyParser.urlencoded({ extended: true })); // ใช้ body-parser เพื่ออ่าน URL-encoded payloads
 
 
 // ให้ Express.js ใช้งาน CORS middleware
 app.use(cors());
+const api = process.env.BASE_URL;
+console.log(api);
+
+// ตั้งค่าเสิร์ฟไฟล์จากโฟลเดอร์ assets
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/uploadfile.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'uploadfile.html'));
+});
+app.get('/table.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'table.html'));
+});
+app.get('/report.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'report.html'));
+});
+app.get('/holidays.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'holidays.html'));
+});
+app.get('/mapdebtt.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'mapdebtt.html'));
+});
+// Serve the form.html file
+app.get('/form.html', (req, res) => {
+    const params = req.query;
+    console.log(params); // แสดง query parameters ใน console
+    res.sendFile(path.join(__dirname, 'form.html'));
+});
+
+//นับจำนวนหน้าแรก
+app.get('/api/status-counts', (req, res) => {
+    const sql = `
+        SELECT status, COUNT(*) as count
+        FROM bills
+        GROUP BY status;
+    `;
+
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching status counts:', err);
+            res.status(500).json({ message: 'Error fetching status counts' });
+            return;
+        }
+        
+        const statusCounts = results.reduce((acc, row) => {
+            acc[row.status] = row.count;
+            return acc;
+        }, {});
+
+        res.json(statusCounts);
+    });
+});
+
+app.get('/api/responsible-counts', (req, res) => {
+    const sqlPea = `
+        SELECT COUNT(*) AS pea_responsible_count 
+        FROM customer_has_bills 
+        WHERE day_pea > 0;
+    `;
+
+    const sqlEmployee = `
+        SELECT COUNT(*) AS employee_responsible_count 
+        FROM customer_has_bills 
+        WHERE day_employee > 0;
+    `;
+
+    const sqlContractor = `
+        SELECT COUNT(*) AS contractor_responsible_count 
+        FROM customer_has_bills 
+        WHERE day_company > 0;
+    `;
+
+    // Execute all queries
+    connection.query(sqlPea, (err, peaResults) => {
+        if (err) {
+            console.error('Error fetching PEA responsible count:', err);
+            res.status(500).json({ message: 'Error fetching PEA responsible count' });
+            return;
+        }
+
+        connection.query(sqlEmployee, (err, employeeResults) => {
+            if (err) {
+                console.error('Error fetching employee responsible count:', err);
+                res.status(500).json({ message: 'Error fetching employee responsible count' });
+                return;
+            }
+
+            connection.query(sqlContractor, (err, contractorResults) => {
+                if (err) {
+                    console.error('Error fetching contractor responsible count:', err);
+                    res.status(500).json({ message: 'Error fetching contractor responsible count' });
+                    return;
+                }
+
+                res.json({
+                    pea_responsible_count: peaResults[0].pea_responsible_count,
+                    employee_responsible_count: employeeResults[0].employee_responsible_count,
+                    contractor_responsible_count: contractorResults[0].contractor_responsible_count,
+                });
+            });
+        });
+    });
+});
+
+
 
 // ตั้งค่า Multer เพื่อรับไฟล์ Excel
 const storage = multer.memoryStorage();
@@ -82,9 +195,6 @@ app.post('/upload-etsx', upload.single('file'), (req, res) => {
     }
 });
 
-
-
-
 // API เพื่อดึงข้อมูล id_command
 app.get('/api/id_commands', (req, res) => {
     const sql = 'SELECT id_command FROM bills';
@@ -115,10 +225,21 @@ app.post('/upload121', upload.single('file'), (req, res) => {
     const id_command = `${orderNumber}/${year}`;
 
     const convertThaiToGregorian = (thaiDate) => {
+        if (typeof thaiDate !== 'string') {
+            console.error('รูปแบบวันที่ไม่ถูกต้อง:', thaiDate);
+            return null; // หรือจัดการข้อผิดพลาดตามความเหมาะสม
+        }
+    
         const [month, thaiYear] = thaiDate.split('.');
+        if (!month || !thaiYear) {
+            console.error('รูปแบบวันที่ไม่ถูกต้อง:', thaiDate);
+            return null;
+        }
+    
         const gregorianYear = parseInt(thaiYear, 10) - 543;
         return `${month}.${gregorianYear}`;
     };
+    
 
     connection.beginTransaction(err => {
         if (err) {
@@ -154,6 +275,7 @@ app.post('/upload121', upload.single('file'), (req, res) => {
 
                 const checkPromises = newData.map(row => {
                     const billMonth = convertThaiToGregorian(row.บิลเดือน);
+
                     return new Promise((resolve, reject) => {
                         connection.query(sql2Check, [row.หมายเลขผู้ใช้ไฟฟ้า, billMonth, id_command], (err, results) => {
                             if (err) {
@@ -322,7 +444,7 @@ app.post('/upload030', upload.single('file'), (req, res) => {
                 }
 
                 const updateToPaidSql = 'UPDATE bills SET status = ? WHERE id_command = ?';
-                connection.query(updateToPaidSql, ['ชำระเงินเรียบร้อยแล้ว', id_command], (error, results) => {
+                connection.query(updateToPaidSql, ['ชำระเงินแล้ว', id_command], (error, results) => {
                     if (error) {
                         console.error('Error executing UPDATE to paid query:', error);
                         return reject(error);
@@ -391,7 +513,7 @@ function queryDatabase(sql) {
 }
 
 // Endpoint สำหรับดึงข้อมูลวันหยุด
-app.get('/holidays', (req, res) => {
+app.get('/api/holidays', (req, res) => {
     const sql = 'SELECT id, date, description FROM holiday';
     connection.query(sql, (err, results) => {
         if (err) {
@@ -556,63 +678,193 @@ app.get('/data', (req, res) => {
     });
 });
 
-app.post('/save-date', (req, res) => {
-    const { customer_ca, id_command, date, bills_id } = req.body;
+// ฟังก์ชันจัดการการบันทึกข้อมูล
+app.post('/save-data', upload.fields([{ name: 'file1' }, { name: 'file2' }]), (req, res) => {
+    try {
+        console.log('Form data received:', req.body);
 
-    if (!customer_ca || !id_command || !date || !bills_id) {
-        res.status(400).send('Bad Request: Missing required fields');
-        return;
+        const customerCa = req.body.customer_ca;
+        console.log('Customer CA:', customerCa);
+
+        if (!customerCa) {
+            throw new Error('Missing customer_ca value');
+        }
+
+        const tableData = req.body.tableData;
+        const table = JSON.parse(tableData); // แปลง string เป็น JSON
+
+        // ดึงไฟล์จาก req.files
+        const file1 = req.files['file1'] ? req.files['file1'][0] : null;
+        const file2 = req.files['file2'] ? req.files['file2'][0] : null;
+
+        // ดีบักข้อมูลไฟล์
+        console.log('File1:', file1);
+        console.log('File2:', file2);
+
+        // ใช้ buffer โดยตรงจาก multer
+        const file1Content = file1 ? file1.buffer : null;
+        const file2Content = file2 ? file2.buffer : null;
+
+        table.forEach((bill) => {
+            const { 
+                id,
+                dateRegis,
+                startDate, 
+                endDate, 
+                dateSystem, 
+                dateEmployee, 
+                dateDeferment, 
+                dateDeferment2, 
+                dateCompany, 
+                daysEmployee, 
+                daysCompany, 
+                daysPea, 
+                amountPay, 
+                amountEmployee, 
+                amountCompany, 
+                amountPea 
+            } = bill;
+
+            const details = `กฟภ. ${daysPea} วัน ${amountPea} บาท, พนง. ${daysEmployee} วัน ${amountEmployee} บาท, ผรจ. ${daysCompany} วัน ${amountCompany} บาท`;
+
+            // ตรวจสอบว่ามีบันทึกอยู่แล้วหรือไม่
+            connection.query(
+                `SELECT * FROM customer_has_bills WHERE customer_ca = ? AND bills_id = ?`,
+                [customerCa, id],
+                (err, results) => {
+                    if (err) {
+                        console.error('Error executing query:', err);
+                        return res.status(500).json({ success: false, error: err.message });
+                    }
+
+                    if (results.length > 0) {
+                        // อัปเดตบันทึกที่มีอยู่แล้ว
+                        connection.query(
+                            `UPDATE customer_has_bills 
+                            SET date_system = ?, date_employee = ?, date_company = ?, date_deferment = ?, date_deferment2 = ?, 
+                            image_regis = ?, image_cutmeter = ?, 
+                            day_employee = ?, day_company = ?, day_pea = ?, 
+                            money_employee = ?, money_company = ?, money_pea = ?,
+                            details = ?
+                            WHERE customer_ca = ? AND bills_id = ?`,
+                            [
+                                formatSQLDate(dateSystem), 
+                                formatSQLDate(dateEmployee), 
+                                formatSQLDate(dateCompany), 
+                                formatSQLDate(dateDeferment), 
+                                formatSQLDate(dateDeferment2), 
+                                file1Content,
+                                file2Content,
+                                daysEmployee, 
+                                daysCompany, 
+                                daysPea, 
+                                amountEmployee, 
+                                amountCompany, 
+                                amountPea,
+                                details,
+                                customerCa, 
+                                id
+                            ],
+                            (err) => {
+                                if (err) {
+                                    console.error('Error updating record:', err);
+                                    return res.status(500).json({ success: false, error: err.message });
+                                }
+                            }
+                        );
+                    } else {
+                        // แทรกบันทึกใหม่
+                        connection.query(
+                            `INSERT INTO customer_has_bills (customer_ca, bills_id, date_system, date_employee, date_company, date_deferment, date_deferment2, 
+                            image_regis, image_cutmeter, day_employee, day_company, day_pea, money_employee, money_company, money_pea, details) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                            [
+                                customerCa, 
+                                id, 
+                                formatSQLDate(dateSystem), 
+                                formatSQLDate(dateEmployee), 
+                                formatSQLDate(dateCompany), 
+                                formatSQLDate(dateDeferment), 
+                                formatSQLDate(dateDeferment2), 
+                                file1Content,
+                                file2Content,
+                                daysEmployee, 
+                                daysCompany, 
+                                daysPea, 
+                                amountEmployee, 
+                                amountCompany, 
+                                amountPea,
+                                details
+                            ],
+                            (err) => {
+                                if (err) {
+                                    console.error('Error inserting record:', err);
+                                    return res.status(500).json({ success: false, error: err.message });
+                                }
+                            }
+                        );
+                    }
+
+                    // อัปเดตตาราง bills
+                    connection.query(
+                        `UPDATE bills 
+                        SET 
+                            status = 'ดำเนินการแล้ว', 
+                            date_regis = ?, 
+                            bill_start = ?, 
+                            bill_end = ?
+                        WHERE 
+                            customer_ca = ? AND id = ?`,
+                        [
+                            formatSQLDate(dateRegis), // ใช้วันที่ปัจจุบัน
+                            formatSQLDate(startDate), 
+                            formatSQLDate(endDate), 
+                            customerCa, 
+                            id
+                        ],
+                        (err) => {
+                            if (err) {
+                                console.error('Error updating bills table:', err);
+                                return res.status(500).json({ success: false, error: err.message });
+                            }
+                        }
+                    );
+                }
+            );
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error saving data:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
-    
-    // SQL เพื่อเช็คว่ามีข้อมูลอยู่ในตารางหรือไม่
-    const checkSql = `
-        SELECT * FROM customer_has_bills 
-        WHERE customer_ca = ? AND bills_id = ?;
-    `;
-
-    // SQL เพื่อเพิ่มข้อมูลใหม่
-    const insertSql = `
-        INSERT INTO customer_has_bills (customer_ca, bills_id, date_system, date_employee) 
-        VALUES (?, ?, ?, ?);
-    `;
-
-    // SQL เพื่ออัปเดตข้อมูล
-    const updateSql = `
-        UPDATE customer_has_bills 
-        SET date_system = ?, date_employee = ? 
-        WHERE customer_ca = ? AND bills_id = ?;
-    `;
-
-    connection.query(checkSql, [customer_ca, bills_id], (error, results) => {
-        if (error) {
-            console.error('Error querying database: ' + error.stack);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        if (results.length > 0) {
-            // ถ้ามีข้อมูลอยู่แล้ว อัปเดตข้อมูล
-            connection.query(updateSql, [date, date, customer_ca, bills_id], (error, results) => {
-                if (error) {
-                    console.error('Error updating database: ' + error.stack);
-                    res.status(500).send('Internal Server Error');
-                    return;
-                }
-                res.send('Date updated successfully');
-            });
-        } else {
-            // ถ้าไม่มีข้อมูล เพิ่มข้อมูลใหม่
-            connection.query(insertSql, [customer_ca, bills_id, date, date], (error, results) => {
-                if (error) {
-                    console.error('Error inserting into database: ' + error.stack);
-                    res.status(500).send('Internal Server Error');
-                    return;
-                }
-                res.send('Date inserted successfully');
-            });
-        }
-    });
 });
+
+
+
+
+// ฟังก์ชันจัดรูปแบบวันที่ให้ตรงกับ SQL
+function formatSQLDate(date) {
+    if (!date) return null;
+
+    // ตรวจสอบว่า date เป็น Date object หรือไม่
+    if (!(date instanceof Date)) {
+        // ลองแปลง string หรือค่าอื่นๆ เป็น Date object
+        date = new Date(date);
+    }
+
+    // ตรวจสอบว่าการแปลงสำเร็จหรือไม่
+    if (isNaN(date)) {
+        console.error('Invalid date:', date);
+        return null;
+    }
+
+    // ถ้าต้องการให้เป็น YYYY-MM-DD สำหรับ SQL
+    const [month, day, year] = [date.getMonth() + 1, date.getDate(), date.getFullYear()];
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
+
+
 
 app.get('/debtors', (req, res) => {
     const sql = 'SELECT name, latitude, longitude FROM customer';
@@ -628,13 +880,3 @@ app.get('/debtors', (req, res) => {
 app.listen(3000, () => {
     console.log('Server started on port 3000');
 });
-
-
-
-// เริ่มต้นเซิร์ฟเวอร์ที่พอร์ต 5500
-app.listen(5500, () => {
-    console.log('Server is running on port 5500');
-});
-
-
-

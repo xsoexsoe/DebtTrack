@@ -14,12 +14,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* Updated CSS for centering the map */
         #viewDiv {
-            height: 800px;
-            width: 100%;
+            height: 1000px;
+            width: 80%;
+            margin: 0 auto; /* Center the map horizontally */
+            display: flex;
+            
         }
+        
         .esri-feature-content a {
             color: #ffffff;
+        }
+
+
+        @media (max-width: 768px) {
+            #viewDiv {
+                width: 95%; /* Adjust width for smaller screens */
+            }
         }
     </style>
 </head>
@@ -49,8 +61,13 @@
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายละเอียดลูกหนี้</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="mapdebtt.html">
+                    <i class="fas fa-fw fa-map-marker"></i>
+                    <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">พิกัดลูกหนี้</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="report.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-file-pdf"></i>
                     <span class="custom-font" style="font-family: Prompt, sans-serif;font-size:20px;">รายงาน</span></a>
             </li>
             <hr class="sidebar-divider d-none d-md-block">
@@ -81,25 +98,28 @@
                     </a>
                 </nav>
                 <div class="container-fluid">
-                    <div class="card o-hidden border-0 shadow-lg my-5 mx-20">
-                        <div class="card-body p-0">
+                    <div class="card o-hidden border-0 shadow ">
+                        <div class="card-body p-0 ">
                             <div class="row justify-content-center">
                                 <div class="col-lg-7">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4 " style="font-family: Prompt, sans-serif;font-size: 40px; font-weight: bold; ">พิกัดลูกหนี้</h1>
+                                            <h1 class="h4 text-gray-900 mb-4 " style="font-family: Prompt, sans-serif;font-size: 35px; font-weight: bold; ">พิกัดลูกหนี้</h1>
                                         </div>
-                                        <form class="user">
-                                            <div id="viewDiv"></div>
-                                        </form>
+                                        
                                         <hr>
                                     </div>
+                                    
                                 </div>
                             </div>
+                            <form class="user">
+                                <div id="viewDiv"></div>
+                            </form>
                         </div>
                     </div>
                     <br>
                 </div>
+            
             </div>
         </div>
     </div>

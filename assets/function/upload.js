@@ -6,7 +6,7 @@ async function uploadExcel121() {
 
     // ตรวจสอบว่าทุก input field ถูกกรอกแล้ว
     if (!file || !orderNumber || !year) {
-        alert('Please fill in all fields and select a file.');
+        alert('กรุณากรอกข้อมูลให้ครบทุกช่องและเลือกไฟล์');
         return;
     }
 
@@ -19,23 +19,31 @@ async function uploadExcel121() {
     overlay.style.display = 'block'; // แสดง pop-up
 
     try {
-        const response = await fetch('http://localhost:5500/upload121', {
+ 
+        const response = await fetch('/upload121', {
             method: 'POST',
             body: formData
         });
+
+        // ตรวจสอบว่า response สำเร็จหรือไม่
+        if (!response.ok) {
+            throw new Error('การอัปโหลดไฟล์ล้มเหลว');
+        }
+
         const data = await response.json();
 
+        // แสดง modal ตามผลลัพธ์ที่ได้รับ
         if (data.noNewBills) {
-            var successModal = new bootstrap.Modal(document.getElementById('noNewBillsModal'));
-            successModal.show();
+            const noNewBillsModal = new bootstrap.Modal(document.getElementById('noNewBillsModal'));
+            noNewBillsModal.show();
         } else {
-            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
         }
     } catch (error) {
         console.error('Error:', error);
+        alert('เกิดข้อผิดพลาดในการอัปโหลด กรุณาลองใหม่อีกครั้ง');
     } finally {
         overlay.style.display = 'none'; // ซ่อน pop-up เมื่ออัปโหลดเสร็จสิ้น
     }
 }
-

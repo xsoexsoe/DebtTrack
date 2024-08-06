@@ -13,9 +13,7 @@ const connection = mysql.createConnection({
     user: 'root',
     password: 'root',
     database: 'db_debttrack',
-    authPlugins: {
-        mysql_native_password: () => () => Buffer.from('root'),
-      }
+    port: 3300
 });
 
 // เชื่อมต่อกับ MySQL Database
